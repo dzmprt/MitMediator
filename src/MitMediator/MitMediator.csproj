@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>MitMediator</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>MitMediator</PackageId> 
+        <Version>6.0.0-alfa</Version> 
+        <Description>A lightweight mediator inspired by MediatR, featuring built-in ValueTask support.</Description> 
+        <PackageProjectUrl>https://github.com/dzmprt/MitMediator</PackageProjectUrl> 
+        <RepositoryUrl>https://github.com/dzmprt/MitMediator</RepositoryUrl> 
+        <Authors>Dmitry Protko</Authors> 
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>logo.png</PackageIcon> 
+        <PackageTags>mediator;request;response;queries;commands;mitmediator;</PackageTags> 
+        <PackageLicenseFile>LICENSE</PackageLicenseFile> 
+        <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance> 
+        <PackageReleaseNotes>v6.0.0-alfa</PackageReleaseNotes> 
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\assets\logo.png" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="MitMediator.Tests" />
+    </ItemGroup>
+
+</Project>
