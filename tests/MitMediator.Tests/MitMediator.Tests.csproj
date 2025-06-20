@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\MitMediator \MitMediator.csproj" />
+      <ProjectReference Include="..\..\src\MitMediator\MitMediator.csproj" />
     </ItemGroup>
 
 </Project>
