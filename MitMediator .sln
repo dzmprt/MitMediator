@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitMediator", "src\MitMediator \MitMediator.csproj", "{A9C653D8-0475-458C-9C3A-C3AEE42A0890}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3A357486-30E1-4A6F-91B3-8188E5098737}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A8EA81C8-6E76-42AE-AB3A-6E3831183961}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitMediator.Tests", "tests\MitMediator.Tests\MitMediator.Tests.csproj", "{58F4A8C2-9CBC-4ACD-9764-0CBFE509DFE7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9C653D8-0475-458C-9C3A-C3AEE42A0890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9C653D8-0475-458C-9C3A-C3AEE42A0890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9C653D8-0475-458C-9C3A-C3AEE42A0890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9C653D8-0475-458C-9C3A-C3AEE42A0890}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58F4A8C2-9CBC-4ACD-9764-0CBFE509DFE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58F4A8C2-9CBC-4ACD-9764-0CBFE509DFE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58F4A8C2-9CBC-4ACD-9764-0CBFE509DFE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58F4A8C2-9CBC-4ACD-9764-0CBFE509DFE7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A9C653D8-0475-458C-9C3A-C3AEE42A0890} = {3A357486-30E1-4A6F-91B3-8188E5098737}
+		{58F4A8C2-9CBC-4ACD-9764-0CBFE509DFE7} = {A8EA81C8-6E76-42AE-AB3A-6E3831183961}
+	EndGlobalSection
+EndGlobal
