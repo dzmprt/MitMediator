@@ -115,7 +115,7 @@ internal class Mediator : IMediator
         }
     }
     
-    public ValueTask PublishParallelAsync<TNotification>(
+    public Task PublishParallelAsync<TNotification>(
         TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification : INotification
@@ -126,15 +126,15 @@ internal class Mediator : IMediator
 
         if (!handlers.Any())
         {
-            return ValueTask.CompletedTask;
+            return Task.CompletedTask;
         }
 
         if (handlers.Length == 1)
         {
-            return handlers.First().HandleAsync(notification, cancellationToken);
+            return handlers.First().HandleAsync(notification, cancellationToken).AsTask();
         }
         
         var tasks = handlers.Select(h => h.HandleAsync(notification, cancellationToken).AsTask()).ToArray();
-        return new(Task.WhenAll(tasks));
+        return Task.WhenAll(tasks);
     }
 }

@@ -44,23 +44,23 @@ public interface IMediator
     ValueTask SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest;
     
     /// <summary>
-    /// 
+    /// Asynchronously publishes a notification to all registered handlers.
     /// </summary>
-    /// <param name="notification"></param>
-    /// <param name="cancellationToken"></param>
-    /// <typeparam name="TNotification"></typeparam>
+    /// <param name="notification">Notification.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+    /// <typeparam name="TNotification">Notification type.</typeparam>
     /// <returns></returns>
     ValueTask PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
         where TNotification : INotification;
 
     /// <summary>
-    /// 
+    /// Asynchronously publishes a notification to all registered handlers in parallel.
     /// </summary>
-    /// <param name="notification"></param>
-    /// <param name="cancellationToken"></param>
-    /// <typeparam name="TNotification"></typeparam>
+    /// <param name="notification">Notification.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+    /// <typeparam name="TNotification">Notification type.</typeparam>
     /// <returns></returns>
-    ValueTask PublishParallelAsync<TNotification>(
+    Task PublishParallelAsync<TNotification>(
         TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification : INotification;
