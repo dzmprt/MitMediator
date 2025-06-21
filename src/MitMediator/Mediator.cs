@@ -16,15 +16,13 @@ internal class Mediator : IMediator
     {
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, TResponse>>()
-            .Distinct()
-            .ToArray();
+            .Distinct();
+        
+        var requestHandler = _serviceProvider
+            .GetRequiredService<Tasks.IRequestHandler<TRequest, TResponse>>();
 
-        var handler = async ValueTask<TResponse> () =>
-        {
-            var requestHandler = _serviceProvider
-                .GetRequiredService<Tasks.IRequestHandler<TRequest, TResponse>>();
-            return await requestHandler.Handle(request, cancellationToken);
-        };
+        var handler = async ValueTask<TResponse> () => 
+            await requestHandler.Handle(request, cancellationToken);
 
         foreach (var behavior in behaviors)
         {
@@ -39,13 +37,13 @@ internal class Mediator : IMediator
     {
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, Unit>>()
-            .Distinct()
-            .ToArray();
+            .Distinct();
+        
+        var requestHandler = _serviceProvider
+            .GetRequiredService<Tasks.IRequestHandler<TRequest>>();
 
-        Func<ValueTask<Unit>> handler = async () =>
+        var handler = async ValueTask<Unit> () => 
         {
-            var requestHandler = _serviceProvider
-                .GetRequiredService<Tasks.IRequestHandler<TRequest>>();
             await requestHandler.Handle(request, cancellationToken);
             return new Unit();
         };
@@ -64,14 +62,11 @@ internal class Mediator : IMediator
     {
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, TResponse>>()
-            .Distinct()
-            .ToArray();
+            .Distinct();
+        
+        var requestHandler = _serviceProvider.GetRequiredService<IRequestHandler<TRequest, TResponse>>();
 
-        var handler = () =>
-        {
-            var requestHandler = _serviceProvider.GetRequiredService<IHandler<TRequest, TResponse>>();
-            return requestHandler.HandleAsync(request, cancellationToken);
-        };
+        var handler = () => requestHandler.HandleAsync(request, cancellationToken);
 
         foreach (var behavior in behaviors)
         {
@@ -87,12 +82,12 @@ internal class Mediator : IMediator
     {
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, Unit>>()
-            .Distinct()
-            .ToArray();
+            .Distinct();
+        
+        var requestHandler = _serviceProvider.GetRequiredService<IHandler<TRequest>>();
 
         Func<ValueTask<Unit>> handler = async () =>
         {
-            var requestHandler = _serviceProvider.GetRequiredService<IHandler<TRequest>>();
             await requestHandler.HandleAsync(request, cancellationToken);
             return new Unit();
         };
@@ -104,5 +99,42 @@ internal class Mediator : IMediator
         }
 
         await handler();
+    }
+    
+    public async ValueTask PublishAsync<TNotification>(
+        TNotification notification, 
+        CancellationToken cancellationToken = default)
+        where TNotification : INotification
+    {
+        var handlers = _serviceProvider
+            .GetServices<INotificationHandler<TNotification>>();
+        
+        foreach (var handler in handlers)
+        {
+            await handler.HandleAsync(notification, cancellationToken);
+        }
+    }
+    
+    public ValueTask PublishParallelAsync<TNotification>(
+        TNotification notification,
+        CancellationToken cancellationToken = default)
+        where TNotification : INotification
+    {
+        var handlers = _serviceProvider
+            .GetServices<INotificationHandler<TNotification>>()
+            .ToArray();
+
+        if (!handlers.Any())
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        if (handlers.Length == 1)
+        {
+            return handlers.First().HandleAsync(notification, cancellationToken);
+        }
+        
+        var tasks = handlers.Select(h => h.HandleAsync(notification, cancellationToken).AsTask()).ToArray();
+        return new(Task.WhenAll(tasks));
     }
 }
