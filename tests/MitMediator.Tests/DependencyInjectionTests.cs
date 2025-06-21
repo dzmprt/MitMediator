@@ -25,7 +25,7 @@ public class DependencyInjectionTests
     
     public class VoidRequest : IRequest { }
     
-    public class VoidHandler : IHandler<VoidRequest>
+    public class VoidRequestHandler : IRequestHandler<VoidRequest>
     {
         public ValueTask HandleAsync(VoidRequest request, CancellationToken cancellationToken)
         {
@@ -70,9 +70,9 @@ public class DependencyInjectionTests
         response = await sampleRequest2Handler.Handle(new SampleRequest2(), CancellationToken.None);
         Assert.Equal("response", response);
 
-        var voidRequestHandler = provider.GetRequiredService<IHandler<VoidRequest>>();
+        var voidRequestHandler = provider.GetRequiredService<IRequestHandler<VoidRequest>>();
         Assert.NotNull(voidRequestHandler);
-        Assert.IsType<VoidHandler>(voidRequestHandler);
+        Assert.IsType<VoidRequestHandler>(voidRequestHandler);
         await voidRequestHandler!.HandleAsync(new VoidRequest(), CancellationToken.None);
         
         var voidRequest2Handler = provider.GetRequiredService<Tasks.IRequestHandler<VoidRequest2>>();

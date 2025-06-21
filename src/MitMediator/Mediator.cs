@@ -84,7 +84,7 @@ internal class Mediator : IMediator
             .GetServices<IPipelineBehavior<TRequest, Unit>>()
             .Distinct();
         
-        var requestHandler = _serviceProvider.GetRequiredService<IHandler<TRequest>>();
+        var requestHandler = _serviceProvider.GetRequiredService<IRequestHandler<TRequest>>();
 
         Func<ValueTask<Unit>> handler = async () =>
         {
