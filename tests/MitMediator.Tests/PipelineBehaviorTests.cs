@@ -47,7 +47,7 @@ public class PipelineBehaviorTests
             .AddSingleton<IRequestHandler<SpecificCommand, string>, SpecificCommandRequestHandler>()
             .AddSingleton<IRequestHandler<OtherCommand, string>, OtherCommandRequestHandler>()
             .AddSingleton<IPipelineBehavior<SpecificCommand, string>>(behaviorForSpecificCommand)
-            .AddMitMediator();
+            .AddMitMediator(typeof(SampleNotification).Assembly);
 
         var provider = services.BuildServiceProvider();
         var mediator = provider.GetRequiredService<IMediator>();

@@ -97,7 +97,7 @@ public class NotificationTests
         var services = new ServiceCollection()
             .AddSingleton<INotificationHandler<SampleNotification>, FirstHandler>()
             .AddSingleton<INotificationHandler<SampleNotification>, SecondHandler>()
-            .AddMitMediator();
+            .AddMitMediator(typeof(SampleNotification).Assembly);
 
         var provider = services.BuildServiceProvider();
         var mediator = provider.GetRequiredService<IMediator>();
