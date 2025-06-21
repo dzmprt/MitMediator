@@ -7,7 +7,7 @@ public class DependencyInjectionTests
 {
     public class SampleRequest : IRequest<string> { }
 
-    public class SampleHandler : IHandler<SampleRequest, string>
+    public class SampleRequestHandler : IRequestHandler<SampleRequest, string>
     {
         public ValueTask<string> HandleAsync(SampleRequest request, CancellationToken cancellationToken)
             => new("response");
@@ -58,9 +58,9 @@ public class DependencyInjectionTests
         var mediator = provider.GetService<IMediator>();
         Assert.NotNull(mediator);
 
-        var sampleRequestHandler = provider.GetRequiredService<IHandler<SampleRequest, string>>();
+        var sampleRequestHandler = provider.GetRequiredService<IRequestHandler<SampleRequest, string>>();
         Assert.NotNull(sampleRequestHandler);
-        Assert.IsType<SampleHandler>(sampleRequestHandler);
+        Assert.IsType<SampleRequestHandler>(sampleRequestHandler);
         var response = await sampleRequestHandler.HandleAsync(new SampleRequest(), CancellationToken.None);
         Assert.Equal("response", response);
 
@@ -95,8 +95,8 @@ public class DependencyInjectionTests
         var mediator = provider.GetService<IMediator>();
         Assert.NotNull(mediator);
 
-        var handler = provider.GetService<IHandler<SampleRequest, string>>();
+        var handler = provider.GetService<IRequestHandler<SampleRequest, string>>();
         Assert.NotNull(handler);
-        Assert.IsType<SampleHandler>(handler);
+        Assert.IsType<SampleRequestHandler>(handler);
     }
 }

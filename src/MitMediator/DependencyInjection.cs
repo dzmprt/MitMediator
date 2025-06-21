@@ -21,14 +21,14 @@ public static class DependencyInjection
 
     private static IServiceCollection AddHandlers(this IServiceCollection services, Type[] allTypes)
     {
-        var interfaceType = typeof(IHandler<,>);
+        var interfaceType = typeof(IRequestHandler<,>);
         var implementations = allTypes
             .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType));
 
         foreach (var implementation in implementations)
         {
             services = services.AddTransient(
-                implementation.GetInterfaces().Single(c => c.GetGenericTypeDefinition() == typeof(IHandler<,>)),
+                implementation.GetInterfaces().Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(IRequestHandler<,>)),
                 implementation);
         }
         
@@ -39,7 +39,7 @@ public static class DependencyInjection
         foreach (var implementation in implementations)
         {
             services = services.AddTransient(
-                implementation.GetInterfaces().Single(c => c.GetGenericTypeDefinition() == typeof(Tasks.IRequestHandler<,>)),
+                implementation.GetInterfaces().Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(Tasks.IRequestHandler<,>)),
                 implementation);
         }
         
@@ -50,7 +50,7 @@ public static class DependencyInjection
         foreach (var implementation in implementations)
         {
             services = services.AddTransient(
-                implementation.GetInterfaces().Single(c => c.GetGenericTypeDefinition() == typeof(IHandler<>)),
+                implementation.GetInterfaces().Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(IHandler<>)),
                 implementation);
         }
 
@@ -62,7 +62,7 @@ public static class DependencyInjection
         foreach (var implementation in implementations)
         {
             services = services.AddTransient(
-                implementation.GetInterfaces().Single(c => c.GetGenericTypeDefinition() == typeof(Tasks.IRequestHandler<>)),
+                implementation.GetInterfaces().Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(Tasks.IRequestHandler<>)),
                 implementation);
         }
         

@@ -42,4 +42,26 @@ public interface IMediator
     /// <typeparam name="TRequest"><see cref="TRequest"/></typeparam>
     /// <returns>A task that represents the send operation. The task result contains the handler response.</returns>
     ValueTask SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="notification"></param>
+    /// <param name="cancellationToken"></param>
+    /// <typeparam name="TNotification"></typeparam>
+    /// <returns></returns>
+    ValueTask PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+        where TNotification : INotification;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="notification"></param>
+    /// <param name="cancellationToken"></param>
+    /// <typeparam name="TNotification"></typeparam>
+    /// <returns></returns>
+    ValueTask PublishParallelAsync<TNotification>(
+        TNotification notification,
+        CancellationToken cancellationToken = default)
+        where TNotification : INotification;
 }
