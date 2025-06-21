@@ -1,7 +1,12 @@
 MitMediator
 =======
-![.NET 6.0](https://img.shields.io/badge/Version-.NET%206.0-informational?style=flat&logo=dotnet)
 [![Build and Test](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml/badge.svg)](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml)
+![NuGet](https://img.shields.io/nuget/v/MitMediator)
+![.NET 6.0](https://img.shields.io/badge/Version-.NET%206.0-informational?style=flat&logo=dotnet)
+![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+![NuGet Downloads](https://img.shields.io/nuget/dt/MitMediator)
+![License](https://img.shields.io/github/license/dzmprt/MitMediator)
+
 
 **MitMediator** is a lightweight and extensible mediator implementation inspired by MediatR. It supports pipeline behaviors with ordering, async handling, and seamless integration with the .NET dependency injection system
 
