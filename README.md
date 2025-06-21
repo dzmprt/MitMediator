@@ -20,7 +20,7 @@ MitMediator
 ### Installation
 
 ```bash
-dotnet add package MitMediator -v 6.0.0-alfa
+dotnet add package MitMediator -v 6.0.0-alfa-2
 ```
 
 ## Example Usage
@@ -99,7 +99,7 @@ You can reuse your existing handlers with minimal modifications — just update 
 1. Add the `MitMediator` package
 
 ```bash
-   dotnet add package MitMediator -v 6.0.0-alfa
+   dotnet add package MitMediator -v 6.0.0-alfa-2
 ```
 
 2. In your request files, replace the namespace `MediatR` with `MitMediator`.
