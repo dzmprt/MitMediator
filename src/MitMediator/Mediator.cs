@@ -124,17 +124,25 @@ internal class Mediator : IMediator
             .GetServices<INotificationHandler<TNotification>>()
             .ToArray();
 
-        if (!handlers.Any())
+        switch (handlers.Length)
         {
-            return Task.CompletedTask;
+            case 0:
+                return Task.CompletedTask;
+            case 1:
+                return handlers[0].HandleAsync(notification, cancellationToken).AsTask();
+            default:
+            {
+                var tasks = handlers.Select(h => h.HandleAsync(notification, cancellationToken).AsTask());
+                return Task.WhenAll(tasks);
+            }
         }
+    }
 
-        if (handlers.Length == 1)
-        {
-            return handlers.First().HandleAsync(notification, cancellationToken).AsTask();
-        }
-        
-        var tasks = handlers.Select(h => h.HandleAsync(notification, cancellationToken).AsTask()).ToArray();
-        return Task.WhenAll(tasks);
+    public IAsyncEnumerable<TResponse> CreateStream<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IStreamRequest<TResponse>
+    {
+        var handler = _serviceProvider
+            .GetRequiredService<IStreamRequestHandler<TRequest, TResponse>>();
+
+        return handler.Handle(request, cancellationToken);
     }
 }

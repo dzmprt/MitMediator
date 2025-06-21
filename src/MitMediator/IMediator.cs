@@ -64,4 +64,17 @@ public interface IMediator
         TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification : INotification;
+
+    /// <summary>
+    /// Creates an asynchronous stream using a single stream request handler.
+    /// </summary>
+    /// <typeparam name="TResponse">Response type.</typeparam>
+    /// <typeparam name="TRequest">Request type.</typeparam>
+    /// <param name="request">Request type.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+    /// <returns>Returns an <see cref="IAsyncEnumerable{TResponse}"/> based on the specified stream request.</returns>
+    IAsyncEnumerable<TResponse> CreateStream<TRequest, TResponse>(
+        TRequest request,
+        CancellationToken cancellationToken = default)
+        where TRequest : IStreamRequest<TResponse>;
 }

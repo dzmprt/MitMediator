@@ -55,7 +55,7 @@ public class MediatorTaskResultHandlersTest
         var mediator = new Mediator(serviceProvider);
 
         // Act
-        await mediator.Send(request, default);
+        await mediator.Send(request, CancellationToken.None);
 
         // Assert
         handlerMock.Verify(h => h.Handle(request, It.IsAny<CancellationToken>()), Times.Once);
