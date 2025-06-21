@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>MitMediator</PackageId> 
-        <Version>6.0.0-alfa-2</Version> 
+        <Version>6.0.0-alfa-3</Version> 
         <Description>A lightweight mediator inspired by MediatR, featuring built-in ValueTask support.</Description> 
         <PackageProjectUrl>https://github.com/dzmprt/MitMediator</PackageProjectUrl> 
         <RepositoryUrl>https://github.com/dzmprt/MitMediator</RepositoryUrl> 
@@ -16,7 +16,8 @@
         <PackageTags>mediator;request;response;queries;commands;mitmediator;</PackageTags> 
         <PackageLicenseFile>LICENSE</PackageLicenseFile> 
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance> 
-        <PackageReleaseNotes>v6.0.0-alfa-2</PackageReleaseNotes> 
+        <PackageReleaseNotes>v6.0.0-alfa-3
+Add INotificationHandler</PackageReleaseNotes> 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
         <Title>MitMediator</Title> 
     </PropertyGroup>
