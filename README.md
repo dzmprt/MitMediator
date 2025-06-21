@@ -10,10 +10,11 @@ MitMediator
 - Supports `IRequest<TResponse>` and `IRequest` (void-style)
 - Custom handlers via `IRequestHandler<,>` and `IRequestHandler<>`
 - Supports both `ValueTask` (for modern, efficient handlers) and `Task` (for compatibility with MediatR-style handlers)
-- Enables middleware-style pipelines with `IPipelineBehavior<TRequest, TResponse>`
+- Enables middleware-style pipelines using `IPipelineBehavior<TRequest, TResponse>`. A pipeline behavior can be defined for all or specific request types.
 - Supports `INotificationHandler` with serial and parallel publishing
 - Ordered execution of pipeline behaviors
 - Simple registration through `AddMitMediator()` or assembly scanning
+- Supports `IStreamRequestHandle` 
 
 ## 🚀 Getting Started
 
@@ -90,7 +91,7 @@ public class HeightBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, T
 }
 ```
 
-To use `Task` instead of `ValueTask`, implement the standard `IRequestHandler` interface.
+To use `Task` instead of `ValueTask`, use `MitMediator.Tasks` namespase.
 
 ### 🔁 Migrating from MediatR
 
@@ -103,24 +104,26 @@ You can reuse your existing handlers with minimal modifications — just update 
 ```
 
 2. In your request files, replace the namespace `MediatR` with `MitMediator`.
-3. In your request handler files, replace the namespace `MediatR` with `MitMediator.Tasks`.
-4. Update your dependency injection setup: replace .`AddMediatR(...)` with `.AddMitMediator()`.
+3. In your request handler files, replace the namespace `MediatR` with `MitMediator` or `MitMediator.Tasks` (for `Task` result).=
+4. Update your dependency injection setup: replace .`AddMediatR(...)` with `.AddMitMediator()`
 5. If you're implementing `INotificationHandler`, use `ValueTask` instead of `Task`
+6. Change all `mediator.Send(request, ct)` to `mediator<TRequset, TResponse>.SendAsync(request, ct)` (or `mediator<TRequset, TResponse>.Send(request, ct)` for `Task` result)
 5. Build and run your project — you’re all set!
 
 MitMediator is designed to feel familiar for those coming from MediatR. Core concepts like IRequest, IRequestHandle, and pipeline behaviors are preserved — but with a cleaner interface and support for ValueTask out of the box.
 
 ### 🔍 Comparison: MitMediator vs. MediatR
 
-| Feature                     | MitMediator                                          | MediatR                                                     |
-|-----------------------------|------------------------------------------------------|-------------------------------------------------------------|
-| **Return types**            | `ValueTask` (default, allocation-friendly)           | `Task` (standard async support)                             |
-| **DI Registration**         | `AddMitMediator()` with optional assembly scanning   | `AddMediatR()` with assemblies explicitly specified         |
-| **Extensibility**           | Designed for lightweight extension and customization | More opinionated; extensibility requires deeper integration |
-| **Return types**            | `ValueTask` (default, allocation-friendly)           | `Task` (standard async support)                             |
-| **Notification publishing** | Serial and parallel                                  | Only serial out of the box                                  |
-| **Performance Focus**       | Async-first, zero-allocation oriented                | Flexible but not optimized for `ValueTask`                  |
-| **License & Availability**  | MIT                                                  | Apache 2.0                                                  |
+| Feature                     | MitMediator                                                | MediatR                                                     |
+|-----------------------------|------------------------------------------------------------|-------------------------------------------------------------|
+| **Return types**            | `ValueTask` (default, allocation-friendly)                 | `Task` (standard async support)                             |
+| **Send methods**            | Strongly typed requests (`SendAsync<TRequest, TResponse>`) | Loosely typed requests (`Send(IRequest)`)                   |
+| **DI Registration**         | `AddMitMediator()` with optional assembly scanning         | `AddMediatR()` with assemblies explicitly specified         |
+| **Extensibility**           | Designed for lightweight extension and customization       | More opinionated; extensibility requires deeper integration |
+| **Return types**            | `ValueTask` (default, allocation-friendly)                 | `Task` (standard async support)                             |
+| **Notification publishing** | Serial and parallel                                        | Only serial out of the box                                  |
+| **Performance Focus**       | Async-first, zero-allocation for `ValueTask`                          | Flexible but not optimized for `ValueTask`                  |
+| **License & Availability**  | MIT                                                        | Apache 2.0                                                  |
 
 ## 🧪 Testing
 
