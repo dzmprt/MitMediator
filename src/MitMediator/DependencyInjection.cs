@@ -1,7 +1,8 @@
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace MitMediator;
+using System.Reflection;
+using MitMediator;
+
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
@@ -32,14 +33,14 @@ public static class DependencyInjection
                 implementation);
         }
         
-        interfaceType = typeof(Tasks.IRequestHandler<,>);
+        interfaceType = typeof(MitMediator.Tasks.IRequestHandler<,>);
         implementations = allTypes
             .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType));
 
         foreach (var implementation in implementations)
         {
             services = services.AddTransient(
-                implementation.GetInterfaces().Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(Tasks.IRequestHandler<,>)),
+                implementation.GetInterfaces().Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(MitMediator.Tasks.IRequestHandler<,>)),
                 implementation);
         }
         
@@ -55,14 +56,14 @@ public static class DependencyInjection
         }
 
         
-        interfaceType = typeof(Tasks.IRequestHandler<>);
+        interfaceType = typeof(MitMediator.Tasks.IRequestHandler<>);
         implementations = allTypes
             .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType));
 
         foreach (var implementation in implementations)
         {
             services = services.AddTransient(
-                implementation.GetInterfaces().Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(Tasks.IRequestHandler<>)),
+                implementation.GetInterfaces().Single(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(MitMediator.Tasks.IRequestHandler<>)),
                 implementation);
         }
         
