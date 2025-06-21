@@ -24,7 +24,7 @@ public class MediatorTests
         var request = new PingRequest();
         var expected = "Pong";
 
-        var handlerMock = new Mock<IHandler<PingRequest, string>>();
+        var handlerMock = new Mock<IRequestHandler<PingRequest, string>>();
         handlerMock
             .Setup(h => h.HandleAsync(request, It.IsAny<CancellationToken>()))
             .ReturnsAsync(expected);
@@ -97,7 +97,7 @@ public class MediatorTests
         var request = new PingRequest();
         var executionOrder = new List<string>();
 
-        var handlerMock = new Mock<IHandler<PingRequest, string>>();
+        var handlerMock = new Mock<IRequestHandler<PingRequest, string>>();
         handlerMock
             .Setup(h => h.HandleAsync(request, It.IsAny<CancellationToken>()))
             .ReturnsAsync("Handled");

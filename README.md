@@ -1,16 +1,17 @@
 MitMediator
 =======
 ![.NET 6.0](https://img.shields.io/badge/Version-.NET%206.0-informational?style=flat&logo=dotnet)
-
+[![Build and Test](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml/badge.svg)](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml)
 
 **MitMediator** is a lightweight and extensible mediator implementation inspired by MediatR. It supports pipeline behaviors with ordering, async handling, and seamless integration with the .NET dependency injection system
 
 ## ✨ Features
 
 - Supports `IRequest<TResponse>` and `IRequest` (void-style)
-- Custom handlers via `IHandler<,>` and `IHandler<>`
+- Custom handlers via `IRequestHandler<,>` and `IRequestHandler<>`
 - Supports both `ValueTask` (for modern, efficient handlers) and `Task` (for compatibility with MediatR-style handlers)
 - Enables middleware-style pipelines with `IPipelineBehavior<TRequest, TResponse>`
+- Supports `INotificationHandler` with serial and parallel publishing
 - Ordered execution of pipeline behaviors
 - Simple registration through `AddMitMediator()` or assembly scanning
 
@@ -25,6 +26,7 @@ dotnet add package MitMediator -v 6.0.0-alfa
 ## Example Usage
 
 ### Simple application with PingRequest, PingRequestHandler and two behaviors.
+
 ```cs
 using Microsoft.Extensions.DependencyInjection;
 using MitMediator;
@@ -50,7 +52,7 @@ Console.WriteLine(result); //Pong result
 
 public class PingRequest : IRequest<string> { }
 
-public class PingRequestHandler : IHandler<PingRequest, string>
+public class PingRequestHandler : IRequestHandler<PingRequest, string>
 {
     public ValueTask<string> HandleAsync(PingRequest request, CancellationToken cancellationToken)
     {
@@ -94,25 +96,31 @@ To use `Task` instead of `ValueTask`, implement the standard `IRequestHandler` i
 
 You can reuse your existing handlers with minimal modifications — just update the namespaces and registration calls.
 
-1. Add the `MitMediator` package 
+1. Add the `MitMediator` package
+
 ```bash
    dotnet add package MitMediator -v 6.0.0-alfa
 ```
-2. Change the namespace `MediatR` to `MitMediator` and `MitMediator.Tasks` in all files across the solution (you can use Find and Replace)
-3. Replace `.AddMediatR(...)` with `.AddMitMediator()` in your dependency injection configuration
-4. You're ready to go!
 
-MitMediator is designed to feel familiar for those coming from MediatR. Core concepts like IRequest, IRequestHandle/IHandler, and pipeline behaviors are preserved — but with a cleaner interface and support for ValueTask out of the box.
+2. In your request files, replace the namespace `MediatR` with `MitMediator`.
+3. In your request handler files, replace the namespace `MediatR` with `MitMediator.Tasks`.
+4. Update your dependency injection setup: replace .`AddMediatR(...)` with `.AddMitMediator()`.
+5. If you're implementing `INotificationHandler`, use `ValueTask` instead of `Task`
+5. Build and run your project — you’re all set!
+
+MitMediator is designed to feel familiar for those coming from MediatR. Core concepts like IRequest, IRequestHandle, and pipeline behaviors are preserved — but with a cleaner interface and support for ValueTask out of the box.
 
 ### 🔍 Comparison: MitMediator vs. MediatR
 
-| Feature                        | MitMediator                                                   | MediatR                                                   |
-|-------------------------------|----------------------------------------------------------------|------------------------------------------------------------|
-| **Return types**              | `ValueTask` (default, allocation-friendly)                     | `Task` (standard async support)                           |
-| **DI Registration**           | `AddMitMediator()` with optional assembly scanning             | `AddMediatR()` with assemblies explicitly specified        |
-| **Extensibility**             | Designed for lightweight extension and customization           | More opinionated; extensibility requires deeper integration |
-| **Performance Focus**         | Async-first, zero-allocation oriented                          | Flexible but not optimized for `ValueTask`                |
-| **License & Availability**    | MIT                        | Apache 2.0                         |
+| Feature                     | MitMediator                                          | MediatR                                                     |
+|-----------------------------|------------------------------------------------------|-------------------------------------------------------------|
+| **Return types**            | `ValueTask` (default, allocation-friendly)           | `Task` (standard async support)                             |
+| **DI Registration**         | `AddMitMediator()` with optional assembly scanning   | `AddMediatR()` with assemblies explicitly specified         |
+| **Extensibility**           | Designed for lightweight extension and customization | More opinionated; extensibility requires deeper integration |
+| **Return types**            | `ValueTask` (default, allocation-friendly)           | `Task` (standard async support)                             |
+| **Notification publishing** | Serial and parallel                                  | Only serial out of the box                                  |
+| **Performance Focus**       | Async-first, zero-allocation oriented                | Flexible but not optimized for `ValueTask`                  |
+| **License & Availability**  | MIT                                                  | Apache 2.0                                                  |
 
 ## 🧪 Testing
 

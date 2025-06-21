@@ -5,7 +5,7 @@ namespace MitMediator;
 /// </summary>
 /// <typeparam name="TRequest">The type of request being handled.</typeparam>
 /// <typeparam name="TResponse">The type of response from the handler.</typeparam>
-public interface IHandler<in TRequest, TResponse> where TRequest : IRequest<TResponse>
+public interface IRequestHandler<in TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
     /// <summary>
     /// Handles a request.
