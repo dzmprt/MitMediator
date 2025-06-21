@@ -20,7 +20,7 @@ public interface IRequestHandler<in TRequest, TResponse> where TRequest : IReque
 /// Handler for a request.
 /// </summary>
 /// <typeparam name="TRequest">The type of request being handled.</typeparam>
-public interface IHandler<in TRequest> where TRequest : IRequest
+public interface IRequestHandler<in TRequest> where TRequest : IRequest
 {
     /// <summary>
     /// Handles a request.

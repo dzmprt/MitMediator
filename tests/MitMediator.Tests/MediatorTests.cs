@@ -49,7 +49,7 @@ public class MediatorTests
         // Arrange
         var request = new PongRequest();
 
-        var handlerMock = new Mock<IHandler<PongRequest>>();
+        var handlerMock = new Mock<IRequestHandler<PongRequest>>();
         handlerMock
             .Setup(h => h.HandleAsync(request, It.IsAny<CancellationToken>()))
             .Returns(ValueTask.CompletedTask);
@@ -72,7 +72,7 @@ public class MediatorTests
     {
         // Arrange
         var request = new VoidRequest();
-        var handlerMock = new Mock<IHandler<VoidRequest>>();
+        var handlerMock = new Mock<IRequestHandler<VoidRequest>>();
         handlerMock
             .Setup(h => h.HandleAsync(request, It.IsAny<CancellationToken>()))
             .Returns(ValueTask.CompletedTask);
@@ -149,7 +149,7 @@ public class MediatorTests
         var request = new VoidRequest();
         var executionOrder = new List<string>();
 
-        var handlerMock = new Mock<IHandler<VoidRequest>>();
+        var handlerMock = new Mock<IRequestHandler<VoidRequest>>();
         handlerMock
             .Setup(h => h.HandleAsync(request, It.IsAny<CancellationToken>()));
 
