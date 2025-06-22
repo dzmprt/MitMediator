@@ -7,7 +7,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddMitMediator(this IServiceCollection services, params Assembly[] assembly)
     {
-        var allTypes = assembly.SelectMany(a => a.GetTypes()).ToArray();
+        var allTypes = assembly.SelectMany(a => a.GetTypes().Where(t => !t.IsAbstract)).ToArray();
 
         return services
             .AddScoped<IMediator, Mediator>()
