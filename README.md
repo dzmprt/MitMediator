@@ -19,7 +19,7 @@ MitMediator
 - Supports `INotificationHandler` with serial and parallel publishing
 - Ordered execution of pipeline behaviors
 - Simple registration through `AddMitMediator()` or assembly scanning
-- Supports `IStreamRequestHandle` 
+- Supports `IStreamRequestHandle` and `IStreamPipelineBehavior`
 
 ## 🚀 Getting Started
 
@@ -41,8 +41,8 @@ using MitMediator;
 var services = new ServiceCollection();
 services
     .AddMitMediator(typeof(PingRequestHandler).Assembly)
-    .AddTransient(typeof(IPipelineBehavior<,>), typeof(LowBehavior<,>))
-    .AddTransient(typeof(IPipelineBehavior<,>), typeof(HeightBehavior<,>));
+    .AddTransient(typeof(IPipelineBehavior<,>), typeof(HeightBehavior<,>))
+    .AddTransient(typeof(IPipelineBehavior<,>), typeof(LowBehavior<,>));
 
 var provider = services.BuildServiceProvider();
 var mediator = provider.GetRequiredService<IMediator>();

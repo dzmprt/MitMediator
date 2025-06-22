@@ -12,7 +12,7 @@ public class StreamNumbers : IStreamRequest<int>
 
 public class StreamNumbersHandler : IStreamRequestHandler<StreamNumbers, int>
 {
-    public async IAsyncEnumerable<int> Handle(
+    public async IAsyncEnumerable<int> HandleAsync(
         StreamNumbers request,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
