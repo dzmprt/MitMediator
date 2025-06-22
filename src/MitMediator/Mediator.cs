@@ -16,7 +16,7 @@ internal class Mediator : IMediator
     {
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, TResponse>>()
-            .Distinct();
+            .Reverse();
         
         var requestHandler = _serviceProvider
             .GetRequiredService<Tasks.IRequestHandler<TRequest, TResponse>>();
@@ -37,7 +37,7 @@ internal class Mediator : IMediator
     {
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, Unit>>()
-            .Distinct();
+            .Reverse();
         
         var requestHandler = _serviceProvider
             .GetRequiredService<Tasks.IRequestHandler<TRequest>>();
@@ -62,7 +62,7 @@ internal class Mediator : IMediator
     {
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, TResponse>>()
-            .Distinct();
+            .Reverse();
         
         var requestHandler = _serviceProvider.GetRequiredService<IRequestHandler<TRequest, TResponse>>();
 
@@ -82,7 +82,7 @@ internal class Mediator : IMediator
     {
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, Unit>>()
-            .Distinct();
+            .Reverse();
         
         var requestHandler = _serviceProvider.GetRequiredService<IRequestHandler<TRequest>>();
 
@@ -140,9 +140,21 @@ internal class Mediator : IMediator
 
     public IAsyncEnumerable<TResponse> CreateStream<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IStreamRequest<TResponse>
     {
-        var handler = _serviceProvider
+        var behaviors = _serviceProvider
+            .GetServices<IStreamPipelineBehavior<TRequest, TResponse>>()
+            .Reverse();
+        
+        var requestHandler = _serviceProvider
             .GetRequiredService<IStreamRequestHandler<TRequest, TResponse>>();
 
-        return handler.Handle(request, cancellationToken);
+        var handler = () => requestHandler.HandleAsync(request, cancellationToken);
+        
+        foreach (var behavior in behaviors)
+        {
+            var next = handler;
+            handler = () => behavior.HandleAsync(request, next, cancellationToken);
+        }
+
+        return handler();
     }
 }

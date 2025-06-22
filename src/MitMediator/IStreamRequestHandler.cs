@@ -14,5 +14,5 @@ public interface IStreamRequestHandler<in TRequest, out TResponse>
     /// <param name="request">Request</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <returns>Response from the request.</returns>
-    IAsyncEnumerable<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
+    IAsyncEnumerable<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken);
 }
