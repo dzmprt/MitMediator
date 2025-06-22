@@ -3,7 +3,7 @@ using Moq;
 
 namespace MitMediator.Tests;
 
-public class MediatorTests
+public class HandleAsyncTests
 {
     public class PingRequest : IRequest<string>
     {
@@ -102,6 +102,18 @@ public class MediatorTests
             .Setup(h => h.HandleAsync(request, It.IsAny<CancellationToken>()))
             .ReturnsAsync("Handled");
 
+        var behaviorHigh = new Mock<IPipelineBehavior<PingRequest, string>>();
+        behaviorHigh
+            .Setup(b => b.HandleAsync(
+                request,
+                It.IsAny<Func<ValueTask<string>>>(),
+                It.IsAny<CancellationToken>()))
+            .Returns((PingRequest _, Func<ValueTask<string>> next, CancellationToken _) =>
+            {
+                executionOrder.Add("High");
+                return next();
+            });
+        
         var behaviorLow = new Mock<IPipelineBehavior<PingRequest, string>>();
         behaviorLow
             .Setup(b => b.HandleAsync(
@@ -114,22 +126,10 @@ public class MediatorTests
                 return next();
             });
 
-        var behaviorHigh = new Mock<IPipelineBehavior<PingRequest, string>>();
-        behaviorHigh
-            .Setup(b => b.HandleAsync(
-                request,
-                It.IsAny<Func<ValueTask<string>>>(),
-                It.IsAny<CancellationToken>()))
-            .Returns((PingRequest _, Func<ValueTask<string>> next, CancellationToken _) =>
-            {
-                executionOrder.Add("High");
-                return next();
-            });
-
         var provider = new ServiceCollection()
             .AddSingleton(handlerMock.Object)
-            .AddSingleton(behaviorLow.Object)
             .AddSingleton(behaviorHigh.Object)
+            .AddSingleton(behaviorLow.Object)
             .BuildServiceProvider();
 
         var mediator = new Mediator(provider);
@@ -179,8 +179,8 @@ public class MediatorTests
 
         var provider = new ServiceCollection()
             .AddSingleton(handlerMock.Object)
-            .AddSingleton(behaviorLow.Object)
             .AddSingleton(behaviorHigh.Object)
+            .AddSingleton(behaviorLow.Object)
             .BuildServiceProvider();
 
         var mediator = new Mediator(provider);
