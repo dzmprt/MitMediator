@@ -109,7 +109,7 @@ You can reuse your existing handlers with minimal modifications — just update 
 ```
 
 2. In your request files, replace the namespace `MediatR` with `MitMediator`.
-3. In your request handler files, replace the namespace `MediatR` with `MitMediator` or `MitMediator.Tasks` (for `Task` result).=
+3. In your request handler files, replace the namespace `MediatR` with `MitMediator` or `MitMediator.Tasks` (for `Task` result).
 4. Update your dependency injection setup: replace .`AddMediatR(...)` with `.AddMitMediator()`
 5. If you're implementing `INotificationHandler`, use `ValueTask` instead of `Task`
 6. Change all `mediator.Send(request, ct)` to `mediator<TRequset, TResponse>.SendAsync(request, ct)` (or `mediator<TRequset, TResponse>.Send(request, ct)` for `Task` result)
