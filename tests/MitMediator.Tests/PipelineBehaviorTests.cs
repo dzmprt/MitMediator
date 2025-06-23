@@ -30,14 +30,11 @@ public class PipelineBehaviorTests
         public int CallCount { get; private set; }
 
         public string Response { get; private set; }
-
-        public async ValueTask<string> HandleAsync(
-            SpecificCommand request,
-            Func<ValueTask<string>> next,
-            CancellationToken cancellationToken)
+        
+        public async ValueTask<string> HandleAsync(SpecificCommand request, ValueTask<string> next, CancellationToken cancellationToken)
         {
             CallCount++;
-            Response = await next();
+            Response = await next;
             return Response;
         }
     }
@@ -51,10 +48,10 @@ public class PipelineBehaviorTests
     
     public class GlobalCommandBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
-        public async ValueTask<TResponse> HandleAsync(TRequest request, Func<ValueTask<TResponse>> next, CancellationToken cancellationToken)
+        public async ValueTask<TResponse> HandleAsync(TRequest request, ValueTask<TResponse> next, CancellationToken cancellationToken)
         {
             GlobalCommandBehaviorCounter.CallCount++;
-            var response = await next();
+            var response = await next;
             GlobalCommandBehaviorCounter.Responses.Add(response.ToString());
             return response;
         }

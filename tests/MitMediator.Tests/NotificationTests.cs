@@ -47,6 +47,25 @@ public class ForOneHandlerNotificationHandler : INotificationHandler<ForOneHandl
 public class NotificationTests
 {
     [Fact]
+    public async Task PublishAsync_CallsWhenNoNotificationHandlers()
+    {
+        // Arrange
+        var services = new ServiceCollection()
+            .AddMitMediator(typeof(FirstHandler).Assembly);
+
+        var provider = services.BuildServiceProvider();
+        var mediator = provider.GetRequiredService<IMediator>();
+
+        var notification = new NotificationWithoutHandler();
+
+        // Act
+        await mediator.PublishAsync(notification, CancellationToken.None);
+
+        // Assert
+        Assert.Empty(notification.Log);
+    }
+    
+    [Fact]
     public async Task PublishParallelAsync_CallsWhenNoNotificationHandlers()
     {
         // Arrange
@@ -119,7 +138,7 @@ public class NotificationTests
         var notification = new SampleNotification();
 
         // Act
-        await mediator.PublishAsync(notification);
+        await mediator.PublishAsync(notification, CancellationToken.None);
 
         // Assert
         Assert.Contains("First", notification.Log);

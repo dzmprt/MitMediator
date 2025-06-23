@@ -14,6 +14,5 @@ public interface IPipelineBehavior<in TRequest, TResponse> where TRequest : IReq
     /// <param name="next">Awaitable delegate for the next action in the pipeline. Eventually this delegate represents the handler.</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <returns>Awaitable task returning the TResponse</returns>
-    ValueTask<TResponse> HandleAsync(TRequest request, Func<ValueTask<TResponse>> next,
-        CancellationToken cancellationToken);
+    ValueTask<TResponse> HandleAsync(TRequest request, ValueTask<TResponse> next, CancellationToken cancellationToken);
 }
