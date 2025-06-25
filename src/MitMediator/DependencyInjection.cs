@@ -10,11 +10,12 @@ public static class DependencyInjection
         var allTypes = assembly.SelectMany(a => a.GetTypes().Where(t => !t.IsAbstract)).ToArray();
 
         return services
-            .AddScoped<IMediator, Mediator>()
+            .AddSingleton<IMediator, Mediator>()
             .AddNotificationHandlers(allTypes)
             .AddRequestHandlers(allTypes)
             .AddStreamRequestHandlers(allTypes);
     }
+
 
     public static IServiceCollection AddMitMediator(this IServiceCollection services)
     {
@@ -29,7 +30,7 @@ public static class DependencyInjection
 
         foreach (var implementation in implementations)
         {
-            services = services.AddTransient(
+            services = services.AddScoped(
                 implementation.GetInterfaces().Single(c =>
                     c.IsGenericType && c.GetGenericTypeDefinition() == typeof(INotificationHandler<>)),
                 implementation);
@@ -46,7 +47,7 @@ public static class DependencyInjection
 
         foreach (var implementation in implementations)
         {
-            services = services.AddTransient(
+            services = services.AddScoped(
                 implementation.GetInterfaces().Single(c =>
                     c.IsGenericType && c.GetGenericTypeDefinition() == typeof(IStreamRequestHandler<,>)),
                 implementation);
@@ -63,7 +64,7 @@ public static class DependencyInjection
 
         foreach (var implementation in implementations)
         {
-            services = services.AddTransient(
+            services = services.AddScoped(
                 implementation.GetInterfaces().Single(c =>
                     c.IsGenericType && c.GetGenericTypeDefinition() == typeof(IRequestHandler<,>)),
                 implementation);
@@ -75,7 +76,7 @@ public static class DependencyInjection
 
         foreach (var implementation in implementations)
         {
-            services = services.AddTransient(
+            services = services.AddScoped(
                 implementation.GetInterfaces().Single(c =>
                     c.IsGenericType && c.GetGenericTypeDefinition() == typeof(MitMediator.Tasks.IRequestHandler<,>)),
                 implementation);
@@ -87,7 +88,7 @@ public static class DependencyInjection
 
         foreach (var implementation in implementations)
         {
-            services = services.AddTransient(
+            services = services.AddScoped(
                 implementation.GetInterfaces().Single(c =>
                     c.IsGenericType && c.GetGenericTypeDefinition() == typeof(IRequestHandler<>)),
                 implementation);
@@ -100,7 +101,7 @@ public static class DependencyInjection
 
         foreach (var implementation in implementations)
         {
-            services = services.AddTransient(
+            services = services.AddScoped(
                 implementation.GetInterfaces().Single(c =>
                     c.IsGenericType && c.GetGenericTypeDefinition() == typeof(MitMediator.Tasks.IRequestHandler<>)),
                 implementation);

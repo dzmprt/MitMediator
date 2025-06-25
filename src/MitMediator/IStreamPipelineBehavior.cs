@@ -15,6 +15,6 @@ public interface IStreamPipelineBehavior<in TRequest, TResponse>
     /// <param name="next">Delegate for the next action in the pipeline. Eventually this delegate represents the handler.</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <returns>Awaitable task returning the TResponse</returns>
-    IAsyncEnumerable<TResponse> HandleAsync(TRequest request, Func<IAsyncEnumerable<TResponse>> next,
+    IAsyncEnumerable<TResponse> HandleAsync(TRequest request, IAsyncEnumerable<TResponse> next,
         CancellationToken cancellationToken);
 }

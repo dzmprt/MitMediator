@@ -50,7 +50,7 @@ public interface IMediator
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <typeparam name="TNotification">Notification type.</typeparam>
     /// <returns></returns>
-    ValueTask PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+    ValueTask PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken)
         where TNotification : INotification;
 
     /// <summary>
@@ -75,6 +75,6 @@ public interface IMediator
     /// <returns>Returns an <see cref="IAsyncEnumerable{TResponse}"/> based on the specified stream request.</returns>
     IAsyncEnumerable<TResponse> CreateStream<TRequest, TResponse>(
         TRequest request,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
         where TRequest : IStreamRequest<TResponse>;
 }

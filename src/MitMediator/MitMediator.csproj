@@ -19,7 +19,8 @@
         <PackageReleaseNotes>v6.0.0-alfa-4
 Added IStreamPipelineBehavior. Changed PipelineBehavior order</PackageReleaseNotes> 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
-        <Title>MitMediator</Title> 
+        <Title>MitMediator</Title>
+        <TrimMode>full</TrimMode>
     </PropertyGroup>
 
     <ItemGroup>

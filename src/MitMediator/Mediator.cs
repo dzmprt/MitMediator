@@ -1,3 +1,5 @@
+using System.Buffers;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MitMediator;
@@ -15,109 +17,92 @@ internal class Mediator : IMediator
         where TRequest : IRequest<TResponse>
     {
         var behaviors = _serviceProvider
-            .GetServices<IPipelineBehavior<TRequest, TResponse>>()
-            .Reverse();
+            .GetServices<IPipelineBehavior<TRequest, TResponse>>();
         
         var requestHandler = _serviceProvider
             .GetRequiredService<Tasks.IRequestHandler<TRequest, TResponse>>();
-
-        var handler = async ValueTask<TResponse> () => 
-            await requestHandler.Handle(request, cancellationToken);
+        
+        var next = TaskToValueTask(requestHandler.Handle(request, cancellationToken));
 
         foreach (var behavior in behaviors)
         {
-            var next = handler;
-            handler = () => behavior.HandleAsync(request, next, cancellationToken);
+            next = behavior.HandleAsync(request, next, cancellationToken);
         }
 
-        return handler().AsTask();
+        return ValueTaskToTask(next);
     }
 
     public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest
     {
-        var behaviors = _serviceProvider
-            .GetServices<IPipelineBehavior<TRequest, Unit>>()
-            .Reverse();
-        
         var requestHandler = _serviceProvider
             .GetRequiredService<Tasks.IRequestHandler<TRequest>>();
-
-        var handler = async ValueTask<Unit> () => 
-        {
-            await requestHandler.Handle(request, cancellationToken);
-            return new Unit();
-        };
+        
+        var behaviors = _serviceProvider
+            .GetServices<IPipelineBehavior<TRequest, Unit>>();
+        
+        var next = TaskToValueTaskUnit(requestHandler.Handle(request, cancellationToken));
 
         foreach (var behavior in behaviors)
         {
-            var next = handler;
-            handler = () => behavior.HandleAsync(request, next, cancellationToken);
+            next = behavior.HandleAsync(request, next, cancellationToken);
         }
 
-        return handler().AsTask();
+        return ValueTaskUnitToTask(next);
     }
 
-    public ValueTask<TResponse> SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
+    public ValueTask<TResponse> SendAsync<TRequest, TResponse>(
+        TRequest request,
+        CancellationToken cancellationToken)
         where TRequest : IRequest<TResponse>
     {
-        var behaviors = _serviceProvider
-            .GetServices<IPipelineBehavior<TRequest, TResponse>>()
-            .Reverse();
+        var requestHandler = _serviceProvider
+            .GetRequiredService<IRequestHandler<TRequest, TResponse>>();
         
-        var requestHandler = _serviceProvider.GetRequiredService<IRequestHandler<TRequest, TResponse>>();
+        var behaviors = _serviceProvider
+            .GetServices<IPipelineBehavior<TRequest, TResponse>>();
 
-        var handler = () => requestHandler.HandleAsync(request, cancellationToken);
+        var next = requestHandler.HandleAsync(request, cancellationToken);
 
         foreach (var behavior in behaviors)
         {
-            var next = handler;
-            handler = () => behavior.HandleAsync(request, next, cancellationToken);
+            next = behavior.HandleAsync(request, next, cancellationToken);
         }
 
-        return handler();
-    }
-
-    public async ValueTask SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken)
-        where TRequest : IRequest
-    {
-        var behaviors = _serviceProvider
-            .GetServices<IPipelineBehavior<TRequest, Unit>>()
-            .Reverse();
-        
-        var requestHandler = _serviceProvider.GetRequiredService<IRequestHandler<TRequest>>();
-
-        Func<ValueTask<Unit>> handler = async () =>
-        {
-            await requestHandler.HandleAsync(request, cancellationToken);
-            return new Unit();
-        };
-
-        foreach (var behavior in behaviors)
-        {
-            var next = handler;
-            handler = () => behavior.HandleAsync(request, next, cancellationToken);
-        }
-
-        await handler();
+        return next;
     }
     
-    public async ValueTask PublishAsync<TNotification>(
+    public ValueTask SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken)
+        where TRequest : IRequest
+    {
+        var requestHandler = _serviceProvider
+            .GetRequiredService<IRequestHandler<TRequest>>();
+        
+        var behaviors = _serviceProvider
+            .GetServices<IPipelineBehavior<TRequest, Unit>>();
+
+        var next = ValueTaskToValueTaskUnit(requestHandler.HandleAsync(request, cancellationToken));
+
+        foreach (var behavior in behaviors)
+        {
+            next = behavior.HandleAsync(request, next, cancellationToken);
+        }
+
+        return ValueTaskUnitToValueTask(next);
+    }
+    
+    public ValueTask PublishAsync<TNotification>(
         TNotification notification, 
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
         where TNotification : INotification
     {
-        var handlers = _serviceProvider
-            .GetServices<INotificationHandler<TNotification>>();
+        var notificationHandlers = _serviceProvider.GetServices<INotificationHandler<TNotification>>();
         
-        foreach (var handler in handlers)
-        {
-            await handler.HandleAsync(notification, cancellationToken);
-        }
+        return CombineNotificationsValueTask(notificationHandlers, notification, cancellationToken);
     }
     
     public Task PublishParallelAsync<TNotification>(
         TNotification notification,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
         where TNotification : INotification
     {
         var handlers = _serviceProvider
@@ -138,23 +123,62 @@ internal class Mediator : IMediator
         }
     }
 
-    public IAsyncEnumerable<TResponse> CreateStream<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IStreamRequest<TResponse>
+    public IAsyncEnumerable<TResponse> CreateStream<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken) where TRequest : IStreamRequest<TResponse>
     {
         var behaviors = _serviceProvider
-            .GetServices<IStreamPipelineBehavior<TRequest, TResponse>>()
-            .Reverse();
+            .GetServices<IStreamPipelineBehavior<TRequest, TResponse>>();
         
         var requestHandler = _serviceProvider
             .GetRequiredService<IStreamRequestHandler<TRequest, TResponse>>();
 
-        var handler = () => requestHandler.HandleAsync(request, cancellationToken);
+        var next = requestHandler.HandleAsync(request, cancellationToken);
         
         foreach (var behavior in behaviors)
         {
-            var next = handler;
-            handler = () => behavior.HandleAsync(request, next, cancellationToken);
+            next = behavior.HandleAsync(request, next, cancellationToken);
         }
 
-        return handler();
+        return next;
+    }
+    
+    private static async ValueTask CombineNotificationsValueTask<TNotification>(IEnumerable<INotificationHandler<TNotification>> handlers, TNotification notification, CancellationToken ct) where TNotification : INotification
+    {
+        foreach (var handler in handlers)
+        {
+            await handler.HandleAsync(notification, ct);
+        }
+    }
+    
+    
+    private static async ValueTask<Unit> ValueTaskToValueTaskUnit(ValueTask valueTask)
+    {
+        await valueTask;
+        return new Unit();
+    }
+    
+    private static async ValueTask<Unit> TaskToValueTaskUnit(Task task)
+    {
+        await task;
+        return new Unit();
+    }
+    
+    private static async ValueTask<TResponse> TaskToValueTask<TResponse>(Task<TResponse> valueTaskUnit)
+    {
+        return await valueTaskUnit;
+    }
+        
+    private static async ValueTask ValueTaskUnitToValueTask(ValueTask<Unit> valueTaskUnit)
+    {
+        await valueTaskUnit;
+    }
+    
+    private static async Task<TResponse> ValueTaskToTask<TResponse>(ValueTask<TResponse> valueTaskUnit)
+    {
+        return await valueTaskUnit;
+    }
+    
+    private static async Task ValueTaskUnitToTask(ValueTask<Unit> valueTaskUnit)
+    {
+        await valueTaskUnit;
     }
 }
