@@ -119,6 +119,23 @@ MitMediator is designed to feel familiar for those coming from MediatR. Core con
 
 ### 🔍 Comparison: MitMediator vs. MediatR
 
+### Performance
+
+| Mediator    | Method                                     | Mean     | Error   | StdDev  | Ratio | Gen0   | Allocated |
+|-------------|--------------------------------------------|---------:|--------:|--------:|------:|-------:|----------:|
+| MediatR     | Send (return result)                       | 252.3 ns | 0.74 ns | 0.70 ns |  1.00 | 0.1836 |     384 B |
+| MitMediator | SendAsync (return result)                  | 107.0 ns | 0.16 ns | 0.15 ns |  0.42 |      - |         - |
+| MediatR     | Send (return result, use behaviors) | 462.7 ns | 1.35 ns | 1.26 ns |  1.00 | 0.4129 |     864 B |
+| MitMediator | SendAsync (return result, use behaviors) | 107.8 ns | 0.83 ns | 0.74 ns |  0.23 |      - |         - |
+| MediatR     | Send (Return void)                  | 249.1 ns | 2.24 ns | 2.10 ns |  1.00 | 0.1488 |     312 B |
+| MitMediator | SendAsync (Return void)                  | 134.5 ns | 0.37 ns | 0.34 ns |  0.54 |      - |         - |
+| MediatR     | Publish                                    | 296.10 ns | 1.739 ns | 1.541 ns |  1.00 | 0.2103 |     440 B |
+| MitMediator | PublishAsync                                    |  81.52 ns | 0.167 ns | 0.148 ns |  0.28 |      - |         - |
+| MediatR     | CreateStream (return stream, use behavior) | 1,447.0 ns | 9.20 ns | 8.16 ns |  1.00 | 0.5722 |    1200 B |
+| MitMediator | CreateStream (return stream, use behavior) |   340.7 ns | 0.98 ns | 0.87 ns |  0.24 | 0.0572 |     120 B |
+
+### Features
+
 | Feature                     | MitMediator                                                | MediatR                                                     |
 |-----------------------------|------------------------------------------------------------|-------------------------------------------------------------|
 | **Return types**            | `ValueTask` (default, allocation-friendly)                 | `Task` (standard async support)                             |

@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitMediator.Tests", "tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitMediator", "src\MitMediator\MitMediator.csproj", "{DC81543C-DC3E-49ED-881C-6906534F16EC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{394C0106-660F-477F-A7D3-EE84993F69CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "benchmarks\Benchmarks\Benchmarks.csproj", "{4E31F1BA-83DC-487C-8B92-B83F84520B9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,9 +26,14 @@ Global
 		{DC81543C-DC3E-49ED-881C-6906534F16EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC81543C-DC3E-49ED-881C-6906534F16EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC81543C-DC3E-49ED-881C-6906534F16EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E31F1BA-83DC-487C-8B92-B83F84520B9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E31F1BA-83DC-487C-8B92-B83F84520B9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E31F1BA-83DC-487C-8B92-B83F84520B9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E31F1BA-83DC-487C-8B92-B83F84520B9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{58F4A8C2-9CBC-4ACD-9764-0CBFE509DFE7} = {A8EA81C8-6E76-42AE-AB3A-6E3831183961}
 		{DC81543C-DC3E-49ED-881C-6906534F16EC} = {3A357486-30E1-4A6F-91B3-8188E5098737}
+		{4E31F1BA-83DC-487C-8B92-B83F84520B9F} = {394C0106-660F-477F-A7D3-EE84993F69CE}
 	EndGlobalSection
 EndGlobal
