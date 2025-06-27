@@ -22,14 +22,9 @@ internal class Mediator : IMediator
         var requestHandler = _serviceProvider
             .GetRequiredService<Tasks.IRequestHandler<TRequest, TResponse>>();
         
-        var next = TaskToValueTask(requestHandler.Handle(request, cancellationToken));
-
-        foreach (var behavior in behaviors)
-        {
-            next = behavior.HandleAsync(request, next, cancellationToken);
-        }
-
-        return ValueTaskToTask(next);
+        using var behaviorEnumerator = behaviors.GetEnumerator();
+        var pipeline = new RequestPipelineTaskHandlers<TRequest, TResponse>(behaviorEnumerator, requestHandler);
+        return pipeline.InvokeAsync(request, cancellationToken).AsTask();
     }
 
     public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest
@@ -40,14 +35,9 @@ internal class Mediator : IMediator
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, Unit>>();
         
-        var next = TaskToValueTaskUnit(requestHandler.Handle(request, cancellationToken));
-
-        foreach (var behavior in behaviors)
-        {
-            next = behavior.HandleAsync(request, next, cancellationToken);
-        }
-
-        return ValueTaskUnitToTask(next);
+        using var behaviorEnumerator = behaviors.GetEnumerator();
+        var pipeline = new RequestPipelineTaskHandlers<TRequest, Unit>(behaviorEnumerator, requestHandler);
+        return pipeline.InvokeAsync(request, cancellationToken).AsTask();
     }
 
     public ValueTask<TResponse> SendAsync<TRequest, TResponse>(
@@ -60,18 +50,13 @@ internal class Mediator : IMediator
         
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, TResponse>>();
-
-        var next = requestHandler.HandleAsync(request, cancellationToken);
-
-        foreach (var behavior in behaviors)
-        {
-            next = behavior.HandleAsync(request, next, cancellationToken);
-        }
-
-        return next;
+        
+        using var behaviorEnumerator = behaviors.GetEnumerator();
+        var pipeline = new RequestPipeline<TRequest, TResponse>(behaviorEnumerator, requestHandler);
+        return pipeline.InvokeAsync(request, cancellationToken);
     }
     
-    public ValueTask SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken)
+    public ValueTask<Unit> SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken)
         where TRequest : IRequest
     {
         var requestHandler = _serviceProvider
@@ -80,24 +65,21 @@ internal class Mediator : IMediator
         var behaviors = _serviceProvider
             .GetServices<IPipelineBehavior<TRequest, Unit>>();
 
-        var next = ValueTaskToValueTaskUnit(requestHandler.HandleAsync(request, cancellationToken));
-
-        foreach (var behavior in behaviors)
-        {
-            next = behavior.HandleAsync(request, next, cancellationToken);
-        }
-
-        return ValueTaskUnitToValueTask(next);
+        using var behaviorEnumerator = behaviors.GetEnumerator();
+        var pipeline = new RequestPipeline<TRequest, Unit>(behaviorEnumerator, requestHandler);
+        return pipeline.InvokeAsync(request, cancellationToken);
     }
     
-    public ValueTask PublishAsync<TNotification>(
+    public async ValueTask PublishAsync<TNotification>(
         TNotification notification, 
         CancellationToken cancellationToken)
         where TNotification : INotification
     {
         var notificationHandlers = _serviceProvider.GetServices<INotificationHandler<TNotification>>();
-        
-        return CombineNotificationsValueTask(notificationHandlers, notification, cancellationToken);
+        foreach (var notificationHandler in notificationHandlers)
+        {
+            await notificationHandler.HandleAsync(notification, cancellationToken);
+        }
     }
     
     public Task PublishParallelAsync<TNotification>(
@@ -139,46 +121,5 @@ internal class Mediator : IMediator
         }
 
         return next;
-    }
-    
-    private static async ValueTask CombineNotificationsValueTask<TNotification>(IEnumerable<INotificationHandler<TNotification>> handlers, TNotification notification, CancellationToken ct) where TNotification : INotification
-    {
-        foreach (var handler in handlers)
-        {
-            await handler.HandleAsync(notification, ct);
-        }
-    }
-    
-    
-    private static async ValueTask<Unit> ValueTaskToValueTaskUnit(ValueTask valueTask)
-    {
-        await valueTask;
-        return new Unit();
-    }
-    
-    private static async ValueTask<Unit> TaskToValueTaskUnit(Task task)
-    {
-        await task;
-        return new Unit();
-    }
-    
-    private static async ValueTask<TResponse> TaskToValueTask<TResponse>(Task<TResponse> valueTaskUnit)
-    {
-        return await valueTaskUnit;
-    }
-        
-    private static async ValueTask ValueTaskUnitToValueTask(ValueTask<Unit> valueTaskUnit)
-    {
-        await valueTaskUnit;
-    }
-    
-    private static async Task<TResponse> ValueTaskToTask<TResponse>(ValueTask<TResponse> valueTaskUnit)
-    {
-        return await valueTaskUnit;
-    }
-    
-    private static async Task ValueTaskUnitToTask(ValueTask<Unit> valueTaskUnit)
-    {
-        await valueTaskUnit;
     }
 }

@@ -5,7 +5,7 @@ namespace MitMediator;
 /// </summary>
 /// <typeparam name="TRequest">Request type.</typeparam>
 /// <typeparam name="TResponse">Response type.</typeparam>
-public interface IPipelineBehavior<in TRequest, TResponse> where TRequest : IRequest<TResponse>
+public interface IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
     /// <summary>
     /// Pipeline handler. Perform any additional behavior and await the next delegate as necessary.
@@ -14,5 +14,5 @@ public interface IPipelineBehavior<in TRequest, TResponse> where TRequest : IReq
     /// <param name="next">Awaitable delegate for the next action in the pipeline. Eventually this delegate represents the handler.</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <returns>Awaitable task returning the TResponse</returns>
-    ValueTask<TResponse> HandleAsync(TRequest request, ValueTask<TResponse> next, CancellationToken cancellationToken);
+    ValueTask<TResponse> HandleAsync(TRequest request, IRequestHandlerNext<TRequest, TResponse> next, CancellationToken cancellationToken);
 }

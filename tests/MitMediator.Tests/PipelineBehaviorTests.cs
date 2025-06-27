@@ -5,6 +5,26 @@ namespace MitMediator.Tests;
 
 public class PipelineBehaviorTests
 {
+    public class MutatingCommand : IRequest<string>
+    {
+        public string Message { get; set; } = "Default";
+    }
+    
+    public class MutatingBehavior : IPipelineBehavior<MutatingCommand, string>
+    {
+        public ValueTask<string> HandleAsync(MutatingCommand request, IRequestHandlerNext<MutatingCommand, string> next, CancellationToken cancellationToken)
+        {
+            request.Message = "Mutated";
+            return next.InvokeAsync(request, cancellationToken);
+        }
+    }
+    
+    public class MutatingCommandRequestHandler : IRequestHandler<MutatingCommand, string>
+    {
+        public ValueTask<string> HandleAsync(MutatingCommand request, CancellationToken cancellationToken)
+            => new(request.Message);
+    }
+    
     public class SpecificCommand : IRequest<string>
     {
     }
@@ -31,10 +51,10 @@ public class PipelineBehaviorTests
 
         public string Response { get; private set; }
         
-        public async ValueTask<string> HandleAsync(SpecificCommand request, ValueTask<string> next, CancellationToken cancellationToken)
+        public async ValueTask<string> HandleAsync(SpecificCommand request, IRequestHandlerNext<SpecificCommand, string> next, CancellationToken cancellationToken)
         {
             CallCount++;
-            Response = await next;
+            Response = await next.InvokeAsync(request, cancellationToken);
             return Response;
         }
     }
@@ -48,15 +68,34 @@ public class PipelineBehaviorTests
     
     public class GlobalCommandBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
-        public async ValueTask<TResponse> HandleAsync(TRequest request, ValueTask<TResponse> next, CancellationToken cancellationToken)
+        public async ValueTask<TResponse> HandleAsync(TRequest request, IRequestHandlerNext<TRequest, TResponse> next, CancellationToken cancellationToken)
         {
             GlobalCommandBehaviorCounter.CallCount++;
-            var response = await next;
+            var response = await next.InvokeAsync(request, cancellationToken);
             GlobalCommandBehaviorCounter.Responses.Add(response.ToString());
             return response;
         }
     }
 
+    [Fact]
+    public async Task PipelineBehavior_CanMutateRequestField()
+    {
+        // Arrange
+        var services = new ServiceCollection()
+            .AddSingleton<IPipelineBehavior<MutatingCommand, string>, MutatingBehavior>()
+            .AddSingleton<IRequestHandler<MutatingCommand, string>, MutatingCommandRequestHandler>()
+            .AddMitMediator(typeof(SampleNotification).Assembly);
+
+        var provider = services.BuildServiceProvider();
+        var mediator = provider.GetRequiredService<IMediator>();
+
+        // Act
+        var result = await mediator.SendAsync<MutatingCommand, string>(new MutatingCommand(), CancellationToken.None);
+
+        // Assert
+        Assert.Equal("Mutated", result);
+    }
+    
     [Fact]
     public async Task PipelineBehavior_SpecificCommandBehavior()
     {

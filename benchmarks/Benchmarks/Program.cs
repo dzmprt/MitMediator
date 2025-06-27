@@ -5,5 +5,5 @@ using Benchmarks;
 // BenchmarkRunner.Run<BenchmarkSendWithResult>();
 // BenchmarkRunner.Run<BenchmarkSendWithResultAndBehaviors>();
 // BenchmarkRunner.Run<BenchmarkSendWithVoidResult>();
-// BenchmarkRunner.Run<BenchmarkPublishNotification>();
-BenchmarkRunner.Run<BenchmarkSendWithStreamResultAndBehaviors>();
+BenchmarkRunner.Run<BenchmarkPublishNotification>();
+// BenchmarkRunner.Run<BenchmarkSendWithStreamResultAndBehaviors>();

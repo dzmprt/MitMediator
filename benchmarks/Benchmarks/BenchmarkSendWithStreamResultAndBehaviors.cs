@@ -41,7 +41,8 @@ public class BenchmarkSendWithStreamResultAndBehaviors
             sum+=value;
         }
 
-        return sum;    }
+        return sum;
+    }
     
     [Benchmark]
     public async ValueTask<int> MitMediator_ReturnResultStreamResult_UseBehaviors()

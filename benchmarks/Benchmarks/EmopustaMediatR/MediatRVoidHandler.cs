@@ -2,10 +2,10 @@ using MediatR;
 
 namespace Benchmarks.EmopustaMediatR;
 
-public record MediatRVoidCommand(string Message) : IRequest;
+public record MediatRVoidCommand(string Message) : IRequest<Unit>;
 
-public class MediatRVoidHandler : IRequestHandler<MediatRVoidCommand>
+public class MediatRVoidHandler : IRequestHandler<MediatRVoidCommand, Unit>
 {
-    public Task Handle(MediatRVoidCommand request, CancellationToken cancellationToken) => 
-        Task.CompletedTask;
+    public Task<Unit> Handle(MediatRVoidCommand request, CancellationToken cancellationToken) => 
+        Task.FromResult(Unit.Value);
 }
