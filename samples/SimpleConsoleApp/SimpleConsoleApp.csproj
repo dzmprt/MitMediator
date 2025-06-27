@@ -7,12 +7,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\src\MitMediator\MitMediator.csproj" />
-    </ItemGroup>
-
     <PropertyGroup>
         <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MitMediator" Version="6.0.0-alfa-5" />
+    </ItemGroup>
 
 </Project>
