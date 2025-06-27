@@ -27,9 +27,9 @@ public class DependencyInjectionTests
     
     public class VoidRequestHandler : IRequestHandler<VoidRequest>
     {
-        public ValueTask HandleAsync(VoidRequest request, CancellationToken cancellationToken)
+        public ValueTask<Unit> HandleAsync(VoidRequest request, CancellationToken cancellationToken)
         {
-            return ValueTask.CompletedTask;
+            return ValueTask.FromResult(Unit.Value);
         }
     }
     
@@ -37,9 +37,9 @@ public class DependencyInjectionTests
     
     public class VoidRequest2Handler : Tasks.IRequestHandler<VoidRequest2>
     {
-        public Task Handle(VoidRequest2 request, CancellationToken cancellationToken)
+        public Task<Unit> Handle(VoidRequest2 request, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            return Task.FromResult(Unit.Value);
         }
     }
 

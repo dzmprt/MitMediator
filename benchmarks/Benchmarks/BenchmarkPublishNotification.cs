@@ -34,14 +34,14 @@ using Benchmarks.EmopustaMediatR;
      
          
      [Benchmark(Baseline = true)]
-     public Task MediatR_Publish()
+     public async Task MediatR_Publish()
      {
-         return _mediatrMediator.Publish(_mediatRNotification, CancellationToken.None);
+         await _mediatrMediator.Publish(_mediatRNotification, CancellationToken.None);
      }
      
      [Benchmark]
-     public ValueTask MitMediator_Publish()
+     public async ValueTask MitMediator_Publish()
      {
-         return _mitMediatr.PublishAsync(_mitNotification, CancellationToken.None);
+         await _mitMediatr.PublishAsync(_mitNotification, CancellationToken.None);
      }
  }

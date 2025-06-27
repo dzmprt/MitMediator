@@ -41,7 +41,7 @@ public interface IMediator
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <typeparam name="TRequest"><see cref="TRequest"/></typeparam>
     /// <returns>A task that represents the send operation. The task result contains the handler response.</returns>
-    ValueTask SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest;
+    ValueTask<Unit>  SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest;
     
     /// <summary>
     /// Asynchronously publishes a notification to all registered handlers.

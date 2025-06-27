@@ -29,14 +29,14 @@ public class BenchmarkSendWithVoidResult
     }
     
     [Benchmark(Baseline = true)]
-    public Task MediatR_SendRequest_ReturnVoid()
+    public async Task MediatR_SendRequest_ReturnVoid()
     {
-        return _mediatrMediator.Send(_mediatRVoidCommand, CancellationToken.None);
+        await _mediatrMediator.Send(_mediatRVoidCommand, CancellationToken.None);
     }
     
     [Benchmark]
-    public ValueTask MitMediator_SendRequest_ReturnVoid()
+    public async ValueTask MitMediator_SendRequest_ReturnVoid()
     {
-        return _mitMediatr.SendAsync(_mitVoidCommand, CancellationToken.None);
+        await _mitMediatr.SendAsync(_mitVoidCommand, CancellationToken.None);
     }
 }
