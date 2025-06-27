@@ -63,19 +63,16 @@ public class PingRequestHandler : IRequestHandler<PingRequest, string>
     public ValueTask<string> HandleAsync(PingRequest request, CancellationToken cancellationToken)
     {
         Console.WriteLine("PingRequestHandler: Pong");
-        return new ValueTask<string>("Pong result");
+        return ValueTask.FromResult("Pong result");
     }
 }
 
 public class LowBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
-    public async ValueTask<TResponse> HandleAsync(
-        TRequest request,
-        Func<ValueTask<TResponse>> next,
-        CancellationToken cancellationToken)
+    public async ValueTask<TResponse> HandleAsync(TRequest request, IRequestHandlerNext<TRequest, TResponse> next, CancellationToken cancellationToken)
     {
         Console.WriteLine($"LowBehavior: Handling {typeof(TRequest).Name}");
-        var result = await next();
+        var result = await next.InvokeAsync(request, cancellationToken);
         Console.WriteLine($"LowBehavior: Handled {typeof(TRequest).Name}");
         return result;
     }
@@ -83,13 +80,10 @@ public class LowBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TRes
 
 public class HeightBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
-    public async ValueTask<TResponse> HandleAsync(
-        TRequest request,
-        Func<ValueTask<TResponse>> next,
-        CancellationToken cancellationToken)
+    public async ValueTask<TResponse> HandleAsync(TRequest request, IRequestHandlerNext<TRequest, TResponse> next, CancellationToken cancellationToken)
     {
         Console.WriteLine($"HeightBehavior: Handling {typeof(TRequest).Name}");
-        var result = await next();
+        var result = await next.InvokeAsync(request, cancellationToken);
         Console.WriteLine($"HeightBehavior: Handled {typeof(TRequest).Name}");
         return result;
     }
@@ -102,18 +96,14 @@ To use `Task` instead of `ValueTask`, use `MitMediator.Tasks` namespase.
 
 You can reuse your existing handlers with minimal modifications — just update the namespaces and registration calls.
 
-1. Add the `MitMediator` package
-
-```bash
-   dotnet add package MitMediator -v 6.0.0-rc
-```
-
+1. Add the `MitMediator` package `dotnet add package MitMediator -v 6.0.0-rc`
 2. In your request files, replace the namespace `MediatR` with `MitMediator`.
 3. In your request handler files, replace the namespace `MediatR` with `MitMediator` or `MitMediator.Tasks` (for `Task` result).
-4. Update your dependency injection setup: replace .`AddMediatR(...)` with `.AddMitMediator()`
-5. If you're implementing `INotificationHandler`, use `ValueTask` instead of `Task`
-6. Change all `mediator.Send(request, ct)` to `mediator<TRequset, TResponse>.SendAsync(request, ct)` (or `mediator<TRequset, TResponse>.Send(request, ct)` for `Task` result)
-5. Build and run your project — you’re all set!
+4. Update your dependency injection setup: replace `.AddMediatR(...)` with `.AddMitMediator()`
+5. Change all `mediator.Send(request, ct)` to `mediator<TRequset, TResponse>.SendAsync(request, ct)` (or `mediator<TRequset, TResponse>.Send(request, ct)` for `Task` result)
+6. If you're implementing `INotificationHandler`, use `ValueTask` instead of `Task`
+7. If you're implementing `IPipelineBehavior`, use `ValueTask` instead of `Task` and `IRequestHandlerNext<TRequest, TResponse> ` instead of  `RequestHandlerDelegate<TResponse>`
+8. Build and run your project — you’re all set!
 
 MitMediator is designed to feel familiar for those coming from MediatR. Core concepts like IRequest, IRequestHandle, and pipeline behaviors are preserved — but with a cleaner interface and support for ValueTask out of the box.
 
@@ -121,30 +111,30 @@ MitMediator is designed to feel familiar for those coming from MediatR. Core con
 
 ### Performance
 
-| Mediator    | Method                                     | Mean     | Error   | StdDev  | Ratio | Gen0   | Allocated |
-|-------------|--------------------------------------------|---------:|--------:|--------:|------:|-------:|----------:|
-| MediatR     | Send (return result)                       | 252.3 ns | 0.74 ns | 0.70 ns |  1.00 | 0.1836 |     384 B |
-| MitMediator | SendAsync (return result)                  | 107.0 ns | 0.16 ns | 0.15 ns |  0.42 |      - |         - |
-| MediatR     | Send (return result, use behaviors) | 462.7 ns | 1.35 ns | 1.26 ns |  1.00 | 0.4129 |     864 B |
-| MitMediator | SendAsync (return result, use behaviors) | 107.8 ns | 0.83 ns | 0.74 ns |  0.23 |      - |         - |
-| MediatR     | Send (Return void)                  | 249.1 ns | 2.24 ns | 2.10 ns |  1.00 | 0.1488 |     312 B |
-| MitMediator | SendAsync (Return void)                  | 134.5 ns | 0.37 ns | 0.34 ns |  0.54 |      - |         - |
-| MediatR     | Publish                                    | 296.10 ns | 1.739 ns | 1.541 ns |  1.00 | 0.2103 |     440 B |
-| MitMediator | PublishAsync                                    |  81.52 ns | 0.167 ns | 0.148 ns |  0.28 |      - |         - |
-| MediatR     | CreateStream (return stream, use behavior) | 1,447.0 ns | 9.20 ns | 8.16 ns |  1.00 | 0.5722 |    1200 B |
-| MitMediator | CreateStream (return stream, use behavior) |   340.7 ns | 0.98 ns | 0.87 ns |  0.24 | 0.0572 |     120 B |
+| Mediator    | Method                                     | Mean (ns) | Allocated (B) |
+|-------------|--------------------------------------------|----------:|--------------:|
+| MediatR     | Send (return result)                       |     261.2 |           384 |
+| MitMediator | SendAsync (return result)                  | **107.6** |         **0** |
+| MediatR     | Send (return result, use behaviors)        |     456.7 |           864 |
+| MitMediator | SendAsync (return result, use behaviors)   | **101.6** |         **0** |
+| MediatR     | Send (Return void)                         |     229.5 |           312 |
+| MitMediator | SendAsync (Return void)                    | **101.0** |         **0** |
+| MediatR     | Publish                                    |     379.1 |           592 |
+| MitMediator | PublishAsync                               | **113.6** |        **32** |
+| MediatR     | CreateStream (return stream, use behavior) |   1,447.0 |          1200 |
+| MitMediator | CreateStream (return stream, use behavior) | **340.7** |       **120** |
 
 ### Features
 
 | Feature                     | MitMediator                                                | MediatR                                                     |
 |-----------------------------|------------------------------------------------------------|-------------------------------------------------------------|
 | **Return types**            | `ValueTask` (default, allocation-friendly)                 | `Task` (standard async support)                             |
-| **Send methods**            | Strongly typed requests (`SendAsync<TRequest, TResponse>`) | Loosely typed requests (`Send(IRequest)`)                   |
+| **Send methods**            | Strongly typed requests (`SendAsync<TRequest, TResponse>`) | Loosely typed requests (`Send(request)`)                    |
 | **DI Registration**         | `AddMitMediator()` with optional assembly scanning         | `AddMediatR()` with assemblies explicitly specified         |
 | **Extensibility**           | Designed for lightweight extension and customization       | More opinionated; extensibility requires deeper integration |
 | **Return types**            | `ValueTask` (default, allocation-friendly)                 | `Task` (standard async support)                             |
 | **Notification publishing** | Serial and parallel                                        | Only serial out of the box                                  |
-| **Performance Focus**       | Async-first, zero-allocation for `ValueTask`                          | Flexible but not optimized for `ValueTask`                  |
+| **Performance Focus**       | Async-first, zero-allocation for `ValueTask`               | Flexible but not optimized for `ValueTask`                  |
 | **License & Availability**  | MIT                                                        | Apache 2.0                                                  |
 
 ## 🧪 Testing

@@ -47,7 +47,7 @@ public class HandleTest
         var handlerMock = new Mock<Tasks.IRequestHandler<PongRequest>>();
         handlerMock
             .Setup(h => h.Handle(request, It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+            .Returns(Task.FromResult(Unit.Value));
 
         var provider = new ServiceCollection()
             .AddSingleton(handlerMock.Object)
@@ -72,7 +72,7 @@ public class HandleTest
         var handlerMock = new Mock<Tasks.IRequestHandler<VoidRequest>>();
         handlerMock
             .Setup(h => h.Handle(request, It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+            .Returns(Task.FromResult(Unit.Value));
 
         var provider = new ServiceCollection()
             .AddSingleton(handlerMock.Object)
@@ -104,24 +104,24 @@ public class HandleTest
         behaviorHigh
             .Setup(b => b.HandleAsync(
                 request,
-                It.IsAny<ValueTask<string>>(),
+                It.IsAny<IRequestHandlerNext<PingRequest, string>>(),
                 It.IsAny<CancellationToken>()))
-            .Returns((PingRequest _, ValueTask<string> next, CancellationToken ct) =>
+            .Returns((PingRequest _, IRequestHandlerNext<PingRequest, string> next, CancellationToken ct) =>
             {
                 executionOrder.Add("High");
-                return next;
+                return next.InvokeAsync(request, ct);
             });
 
         var behaviorLow = new Mock<IPipelineBehavior<PingRequest, string>>();
         behaviorLow
             .Setup(b => b.HandleAsync(
                 request,
-                It.IsAny<ValueTask<string>>(),
+                It.IsAny<IRequestHandlerNext<PingRequest, string>>(),
                 It.IsAny<CancellationToken>()))
-            .Returns((PingRequest _, ValueTask<string> next, CancellationToken ct) =>
+            .Returns((PingRequest _, IRequestHandlerNext<PingRequest, string> next, CancellationToken ct) =>
             {
                 executionOrder.Add("Low");
-                return next;
+                return next.InvokeAsync(request, ct);
             });
 
         var provider = new ServiceCollection()
@@ -156,24 +156,24 @@ public class HandleTest
         behaviorLow
             .Setup(b => b.HandleAsync(
                 request,
-                It.IsAny<ValueTask<Unit>>(),
+                It.IsAny<IRequestHandlerNext<VoidRequest, Unit>>(),
                 It.IsAny<CancellationToken>()))
-            .Returns((VoidRequest _, ValueTask<Unit> next, CancellationToken ct) =>
+            .Returns((VoidRequest _, IRequestHandlerNext<VoidRequest, Unit> next, CancellationToken ct) =>
             {
                 executionOrder.Add("Low");
-                return next;
+                return next.InvokeAsync(request, ct);
             });
 
         var behaviorHigh = new Mock<IPipelineBehavior<VoidRequest, Unit>>();
         behaviorHigh
             .Setup(b => b.HandleAsync(
                 request,
-                It.IsAny<ValueTask<Unit>>(),
+                It.IsAny<IRequestHandlerNext<VoidRequest, Unit>>(),
                 It.IsAny<CancellationToken>()))
-            .Returns((VoidRequest _, ValueTask<Unit> next, CancellationToken ct) =>
+            .Returns((VoidRequest _, IRequestHandlerNext<VoidRequest, Unit> next, CancellationToken ct) =>
             {
                 executionOrder.Add("High");
-                return next;
+                return next.InvokeAsync(request, ct);
             });
 
         var provider = new ServiceCollection()

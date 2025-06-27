@@ -20,13 +20,7 @@ public interface IRequestHandler<in TRequest, TResponse> where TRequest : IReque
 /// Handler for a request.
 /// </summary>
 /// <typeparam name="TRequest">The type of request being handled.</typeparam>
-public interface IRequestHandler<in TRequest>
+public interface IRequestHandler<in TRequest> : IRequestHandler<TRequest, Unit> where TRequest : IRequest<Unit>
 {
-    /// <summary>
-    /// Handles a request.
-    /// </summary>
-    /// <param name="request">The request.</param>
-    /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-    /// <returns>Response from the request.</returns>
-    ValueTask HandleAsync(TRequest request, CancellationToken cancellationToken);
+
 }
