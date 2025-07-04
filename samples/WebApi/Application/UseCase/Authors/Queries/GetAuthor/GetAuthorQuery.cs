@@ -11,5 +11,5 @@ public struct GetAuthorQuery : IRequest<Author>
     /// <summary>
     /// Author id.
     /// </summary>
-    public int AuthorId { get; set; }
+    public int AuthorId { get; init; }
 }

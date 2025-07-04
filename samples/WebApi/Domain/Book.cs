@@ -1,5 +1,8 @@
 ﻿namespace Domain;
 
+/// <summary>
+/// Book.
+/// </summary>
 public class Book
 {
     /// <summary>
@@ -28,6 +31,14 @@ public class Book
     public Genre Genre { get; private set; }
 
     private Book(){}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Book"/>.
+    /// </summary>
+    /// <param name="title">Title.</param>
+    /// <param name="author">Author.</param>
+    /// <param name="genre">Genre.</param>
+    /// <exception cref="ArgumentException">Incorrect title.</exception>
     public Book(string title, Author author, Genre genre)
     {
         SetTitle(title);
@@ -35,16 +46,29 @@ public class Book
         SetGenre(genre);
     }
 
+    /// <summary>
+    /// Set genre.
+    /// </summary>
+    /// <param name="genre">Genre.</param>
     public void SetGenre(Genre genre)
     {
         Genre = genre;
     }
 
+    /// <summary>
+    /// Set author.
+    /// </summary>
+    /// <param name="author">Author.</param>
     public void SetAuthor(Author author)
     {
         Author = author;
     }
 
+    /// <summary>
+    /// Set title.
+    /// </summary>
+    /// <param name="title">Title.</param>
+    /// <exception cref="ArgumentException">Incorrect title.</exception>
     public void SetTitle(string title)
     {
         if (string.IsNullOrWhiteSpace(title))

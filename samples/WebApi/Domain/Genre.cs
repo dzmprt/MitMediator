@@ -16,6 +16,12 @@ public class Genre
     public string GenreName { get; private set; }
 
     private Genre(){}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Genre"/>.
+    /// </summary>
+    /// <param name="genreName">Genre name</param>
+    /// <exception cref="ArgumentException">Incorrect name.</exception>
     public Genre(string genreName)
     {
         if (string.IsNullOrWhiteSpace(genreName))

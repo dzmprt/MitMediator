@@ -14,6 +14,9 @@ using MitMediator;
 
 namespace WebApi.Endpoints;
 
+/// <summary>
+/// Books api endpoints.
+/// </summary>
 public static class BooksApi
 {
     private const string Tag = "books";
@@ -22,6 +25,11 @@ public static class BooksApi
     
     private const string Version = "v1";
     
+    /// <summary>
+    /// Use books api endpoints.
+    /// </summary>
+    /// <param name="app"><see cref="WebApplication"/>.</param>
+    /// <returns><see cref="WebApplication"/>.</returns>
     public static WebApplication UseBooksApi(this WebApplication app)
     {
         #region Queries

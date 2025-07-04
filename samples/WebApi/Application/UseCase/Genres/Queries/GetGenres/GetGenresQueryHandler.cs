@@ -7,7 +7,7 @@ namespace Application.UseCase.Genres.Queries.GetGenres;
 /// <summary>
 /// Handler for <see cref="GetGenresQuery"/>.
 /// </summary>
-public class GetGenresQueryHandler : IRequestHandler<GetGenresQuery, Genre[]>
+internal sealed class GetGenresQueryHandler : IRequestHandler<GetGenresQuery, Genre[]>
 {
     private readonly IBaseProvider<Genre> _genreProvider;
     

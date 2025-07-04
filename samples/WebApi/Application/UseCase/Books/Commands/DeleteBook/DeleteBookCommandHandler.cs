@@ -13,6 +13,10 @@ internal sealed class DeleteBookCommandHandler : IRequestHandler<DeleteBookComma
 {
     private readonly IBaseRepository<Book> _booksRepository;
     
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DeleteBookCommandHandler"/>.
+    /// </summary>
+    /// <param name="booksRepository">Books repository.</param>
     public DeleteBookCommandHandler(IBaseRepository<Book> booksRepository)
     {
         _booksRepository = booksRepository;

@@ -9,6 +9,9 @@ namespace Application.UseCase.Books.Commands.UpdateBook;
 /// </summary>
 public class UpdateBookCommandValidator : AbstractValidator<UpdateBookCommand>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UpdateBookCommandValidator"/>.
+    /// </summary>
     public UpdateBookCommandValidator()
     {
         RuleFor(c => c.Title).NotEmpty().MaximumLength(Book.MaxTitleLength);

@@ -7,6 +7,9 @@ using MitMediator;
 
 namespace WebApi.Endpoints;
 
+/// <summary>
+/// Genres api endpoints.
+/// </summary>
 public static class GenresApi
 {
     private const string Tag = "genres";
@@ -15,6 +18,11 @@ public static class GenresApi
     
     private const string Version = "v1";
     
+    /// <summary>
+    /// Use genres api endpoints.
+    /// </summary>
+    /// <param name="app"></param>
+    /// <returns></returns>
     public static WebApplication UseGenresApi(this WebApplication app)
     {
         #region Queries

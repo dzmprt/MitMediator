@@ -12,6 +12,10 @@ internal sealed class DeleteAuthorCommandHandler : IRequestHandler<DeleteAuthorC
 {
     private readonly IBaseRepository<Author> _authorRepository;
     
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DeleteAuthorCommandHandler"/>.
+    /// </summary>
+    /// <param name="authorRepository">Author repository.</param>
     public DeleteAuthorCommandHandler(IBaseRepository<Author> authorRepository)
     {
         _authorRepository = authorRepository;

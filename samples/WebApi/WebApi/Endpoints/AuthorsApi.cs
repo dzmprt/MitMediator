@@ -9,7 +9,10 @@ using MitMediator;
 
 namespace WebApi.Endpoints;
 
-public static class AuthorsApi
+/// <summary>
+/// Authors api endpoints.
+/// </summary>
+internal static class AuthorsApi
 {
     private const string Tag = "authors";
     
@@ -17,6 +20,11 @@ public static class AuthorsApi
     
     private const string Version = "v1";
     
+    /// <summary>
+    /// Use authors api endpoints.
+    /// </summary>
+    /// <param name="app"><see cref="WebApplication"/>.</param>
+    /// <returns><see cref="WebApplication"/>.</returns>
     public static WebApplication UseAuthorsApi(this WebApplication app)
     {
         #region Queries

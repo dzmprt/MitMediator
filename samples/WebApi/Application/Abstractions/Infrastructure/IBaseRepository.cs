@@ -4,7 +4,6 @@ namespace Application.Abstractions.Infrastructure;
 /// Base entity repository.
 /// </summary>
 /// <typeparam name="TEntity">Entity type.</typeparam>
-/// <typeparam name="TKey">Entity key type.</typeparam>
 public interface IBaseRepository<TEntity> : IBaseProvider<TEntity>
 {
     /// <summary>

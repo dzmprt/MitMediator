@@ -4,8 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configurations;
 
+/// <summary>
+/// Author type configuration.
+/// </summary>
 public class AuthorTypeConfiguration : IEntityTypeConfiguration<Author>
 {
+        
+    /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<Author> builder)
     {
         builder.HasKey(e => e.AuthorId);

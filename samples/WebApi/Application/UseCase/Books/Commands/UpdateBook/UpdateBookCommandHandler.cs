@@ -12,7 +12,9 @@ namespace Application.UseCase.Books.Commands.UpdateBook;
 public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Book>
 {
     private readonly IBaseRepository<Book> _booksRepository;
+    
     private readonly IBaseRepository<Author> _authorsRepository;
+    
     private readonly IBaseRepository<Genre> _genresRepository;
 
     /// <summary>

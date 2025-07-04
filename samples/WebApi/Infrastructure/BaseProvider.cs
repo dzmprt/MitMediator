@@ -4,18 +4,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
+/// <summary>
+/// Base provider.
+/// </summary>
 public class BaseProvider<TEntity> : IBaseProvider<TEntity> where TEntity : class
 {
     protected readonly DbContext DbContext;
 
     protected readonly DbSet<TEntity> DbSet;
     
+    /// <summary>
+    /// Initializes a new instance.
+    /// </summary>
+    /// <param name="dbContext"><see cref="DbContext"/>.</param>
     public BaseProvider(DbContext dbContext)
     {
         DbContext = dbContext;
         DbSet = DbContext.Set<TEntity>();
     }
     
+    /// <inheritdoc/>
     public async ValueTask<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate, CancellationToken cancellationToken)
     {
         if (predicate is null)
@@ -26,6 +34,7 @@ public class BaseProvider<TEntity> : IBaseProvider<TEntity> where TEntity : clas
         return await DbSet.FirstOrDefaultAsync(predicate, cancellationToken: cancellationToken);
     }
 
+    /// <inheritdoc/>
     public async ValueTask<TEntity[]> SearchAsync<TKey>(Expression<Func<TEntity, bool>>? predicate, Expression<Func<TEntity, TKey>>? orderBy, int? limit, int? offset, CancellationToken cancellationToken)
     {
         var query = DbSet.AsQueryable();
@@ -53,11 +62,13 @@ public class BaseProvider<TEntity> : IBaseProvider<TEntity> where TEntity : clas
         return await query.ToArrayAsync(cancellationToken);
     }
 
+    /// <inheritdoc/>
     public async ValueTask<TEntity[]> GetAllAsync(CancellationToken cancellationToken)
     {
         return await DbSet.ToArrayAsync(cancellationToken);
     }
 
+    /// <inheritdoc/>
     public async ValueTask<bool> AnyAsync(Expression<Func<TEntity, bool>>? predicate, CancellationToken cancellationToken)
     {
         if (predicate is null)

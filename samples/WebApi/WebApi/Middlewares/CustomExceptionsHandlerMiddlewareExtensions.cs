@@ -4,16 +4,29 @@ using FluentValidation;
 
 namespace WebApi.Middlewares;
 
-internal class CoreExceptionsHandlerMiddleware
+/// <summary>
+/// Custom exceptions handler middleware.
+/// </summary>
+internal class CustomExceptionsHandlerMiddleware
 {
     private readonly RequestDelegate _next;
     
-    public CoreExceptionsHandlerMiddleware(RequestDelegate next)
+    /// <summary>
+    /// Initializes a new instance of <see cref="CustomExceptionsHandlerMiddleware"/>.
+    /// </summary>
+    /// <param name="next">Next delefate.</param>
+    public CustomExceptionsHandlerMiddleware(RequestDelegate next)
     {
         _next = next;
     }
     
-    public async Task Invoke(HttpContext context, ILogger<CoreExceptionsHandlerMiddleware> logger)
+    
+    /// <summary>
+    /// Invoke handler.
+    /// </summary>
+    /// <param name="context"><see cref="HttpContext"/>.</param>
+    /// <param name="logger"><see cref="ILogger"/></param>
+    public async Task Invoke(HttpContext context, ILogger<CustomExceptionsHandlerMiddleware> logger)
     {
         try
         {
@@ -28,7 +41,7 @@ internal class CoreExceptionsHandlerMiddleware
         }
     }
 
-    private static async Task<bool> HandleExceptionAsync(HttpContext context, Exception exception, ILogger<CoreExceptionsHandlerMiddleware> logger)
+    private static async Task<bool> HandleExceptionAsync(HttpContext context, Exception exception, ILogger<CustomExceptionsHandlerMiddleware> logger)
     {
         HttpStatusCode code;
         string result;
@@ -62,10 +75,18 @@ internal class CoreExceptionsHandlerMiddleware
     }
 }
 
-internal static class ExceptionsHandlerMiddlewareExtensions
+/// <summary>
+/// Custom exceptions handler middleware extensions.
+/// </summary>
+internal static class CustomExceptionsHandlerMiddlewareExtensions
 {
+    /// <summary>
+    /// Use custom exceptions handler.
+    /// </summary>
+    /// <param name="builder"><see cref="IApplicationBuilder"/>.</param>
+    /// <returns><see cref="IApplicationBuilder"/>.</returns>
     public static IApplicationBuilder UseCustomExceptionsHandler(this IApplicationBuilder builder)
     {
-        return builder.UseMiddleware<CoreExceptionsHandlerMiddleware>();
+        return builder.UseMiddleware<CustomExceptionsHandlerMiddleware>();
     }
 }

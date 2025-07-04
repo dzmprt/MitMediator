@@ -14,12 +14,17 @@ internal class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequ
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ValidationBehavior"/>.
+    /// </summary>
+    /// <param name="serviceProvider"><see cref="IServiceProvider"/>.</param>
     public ValidationBehavior(IServiceProvider serviceProvider)
     {
         var s = serviceProvider.GetServices<IValidator<TRequest>>();
         _validators = s;
     }
 
+    /// <inheritdoc/>
     public async ValueTask<TResponse> HandleAsync(TRequest request, IRequestHandlerNext<TRequest, TResponse> next, CancellationToken cancellationToken)
     {
         var context = new ValidationContext<TRequest>(request);
