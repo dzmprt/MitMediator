@@ -10,7 +10,7 @@ public static class DependencyInjection
         var allTypes = assembly.SelectMany(a => a.GetTypes().Where(t => !t.IsAbstract)).ToArray();
 
         return services
-            .AddSingleton<IMediator, Mediator>()
+            .AddScoped<IMediator, Mediator>()
             .AddNotificationHandlers(allTypes)
             .AddRequestHandlers(allTypes)
             .AddStreamRequestHandlers(allTypes);
