@@ -134,7 +134,7 @@ MitMediator is designed to feel familiar for those coming from MediatR. Core con
 | **Extensibility**           | Designed for lightweight extension and customization       | More opinionated; extensibility requires deeper integration |
 | **Notification publishing** | Serial and parallel                                        | Only serial out of the box                                  |
 | **Performance Focus**       | Async-first, zero-allocation for `ValueTask`               | Flexible but not optimized for `ValueTask`                  |
-| **License & Availability**  | MIT                                                        | Apache 2.0                                                  |
+| **License & Availability**  | MIT                                                        | Reciprocal Public License 1.5 (RPL1.5) and commercial license |
 
 ## 🧪 Testing
 
