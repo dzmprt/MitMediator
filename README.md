@@ -140,6 +140,10 @@ MitMediator is designed to feel familiar for those coming from MediatR. Core con
 
 This project includes comprehensive unit tests with **100% code coverage**. All tests are included in the repository
 
+## 🧩 Extensions
+
+[MitMediator.AutoApi](https://github.com/dzmprt/MitMediator) - attribute-driven Minimal API registration
+
 ## 📜 License
 
 MIT
