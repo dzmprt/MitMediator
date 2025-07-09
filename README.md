@@ -142,7 +142,7 @@ This project includes comprehensive unit tests with **100% code coverage**. All 
 
 ## 🧩 Extensions
 
-[MitMediator.AutoApi](https://github.com/dzmprt/MitMediator.AutoApi) - attribute-driven Minimal API registration
+[MitMediator.AutoApi](https://github.com/dzmprt/MitMediator.AutoApi) - automatic creation of API endpoints for requests
 
 ## 📜 License
 
