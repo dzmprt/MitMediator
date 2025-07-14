@@ -39,4 +39,10 @@ public class BenchmarkSendWithResult
     {
         return await _mitMediatr.SendAsync<MitPingCommand, string>(_mitRequest, CancellationToken.None);
     }
+    
+    [Benchmark]
+    public async ValueTask<string> MitMediator_SendRequest_BackwardsCompatibleWithMediatR_ReturnResult()
+    {
+        return await _mitMediatr.Send(_mitRequest, CancellationToken.None);
+    }
 }

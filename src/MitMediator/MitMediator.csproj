@@ -13,7 +13,7 @@
         <Authors>Dmitry Protko</Authors> 
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>logo.png</PackageIcon> 
-        <PackageTags>mediator;request;response;queries;commands;mitmediator;</PackageTags> 
+        <PackageTags>mediator;request;response;queries;commands;mitmediator;cqrs;</PackageTags> 
         <PackageLicenseFile>LICENSE</PackageLicenseFile> 
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance> 
         <PackageReleaseNotes>v6.0.0-rc-2

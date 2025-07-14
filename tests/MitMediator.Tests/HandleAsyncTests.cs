@@ -94,7 +94,7 @@ public class HandleAsyncTests
     }
 
     [Fact]
-    public async Task SendAsync_BehaviorsRespectOrder()
+    public async Task SendAsync_BehaviorsOrder()
     {
         // Arrange
         var request = new PingRequest();
@@ -148,7 +148,7 @@ public class HandleAsyncTests
     }
 
     [Fact]
-    public async Task SendAsync_VoidRequest_BehaviorsRespectOrder()
+    public async Task SendAsync_VoidRequest_BehaviorsOrder()
     {
         // Arrange
         var request = new VoidRequest();

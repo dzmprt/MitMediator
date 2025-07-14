@@ -4,7 +4,7 @@ using MitMediator;
 namespace Application.UseCase.Genres.Commands.CreateGenre;
 
 /// <summary>
-/// Create author command.
+/// Create genre command.
 /// </summary>
 public struct CreateGenreCommand : IRequest<Genre>
 {
