@@ -26,7 +26,7 @@ MitMediator
 ### Installation
 
 ```bash
-dotnet add package MitMediator -v 6.0.0-rc-3
+dotnet add package MitMediator -v 6.0.0-alfa-6
 ```
 
 ## Example Usage
@@ -96,7 +96,7 @@ To use `Task` instead of `ValueTask`, use `MitMediator.Tasks` namespase.
 
 You can reuse your existing handlers with minimal modifications — just update the namespaces and registration calls.
 
-1. Add the `MitMediator` package `dotnet add package MitMediator -v 6.0.0-rc-3`
+1. Add the `MitMediator` package `dotnet add package MitMediator -v 6.0.0-alfa-6`
 2. In your request files, replace the namespace `MediatR` with `MitMediator`.
 3. In your request handler files, replace the namespace `MediatR` with `MitMediator` or `MitMediator.Tasks` (for `Task` result).
 4. Update your dependency injection setup: replace `.AddMediatR(...)` with `.AddMitMediator()`
