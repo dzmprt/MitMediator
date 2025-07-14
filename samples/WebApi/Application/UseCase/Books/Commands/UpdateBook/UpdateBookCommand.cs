@@ -4,7 +4,7 @@ using MitMediator;
 namespace Application.UseCase.Books.Commands.UpdateBook;
 
 /// <summary>
-/// Create book command.
+/// Update book command.
 /// </summary>
 public class UpdateBookCommand : IRequest<Book>
 {

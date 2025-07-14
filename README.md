@@ -26,7 +26,7 @@ MitMediator
 ### Installation
 
 ```bash
-dotnet add package MitMediator -v 6.0.0-rc-2
+dotnet add package MitMediator -v 6.0.0-rc-3
 ```
 
 ## Example Usage
@@ -96,11 +96,11 @@ To use `Task` instead of `ValueTask`, use `MitMediator.Tasks` namespase.
 
 You can reuse your existing handlers with minimal modifications — just update the namespaces and registration calls.
 
-1. Add the `MitMediator` package `dotnet add package MitMediator -v 6.0.0-rc-2`
+1. Add the `MitMediator` package `dotnet add package MitMediator -v 6.0.0-rc-3`
 2. In your request files, replace the namespace `MediatR` with `MitMediator`.
 3. In your request handler files, replace the namespace `MediatR` with `MitMediator` or `MitMediator.Tasks` (for `Task` result).
 4. Update your dependency injection setup: replace `.AddMediatR(...)` with `.AddMitMediator()`
-5. Change all `mediator.Send(request, ct)` to `mediator<TRequset, TResponse>.SendAsync(request, ct)` (or `mediator<TRequset, TResponse>.Send(request, ct)` for `Task` result)
+5. (Optional) Change all `mediator.Send(request, ct)` to `mediator.SendAsync<TRequset, TResponse>(request, ct)` (or `mediator.Send<TRequset, TResponse>(request, ct)` for `Task` result). Use `SendAsync<TRequset, TResponse>` for best performance or `Send` for backward compatibility with MediatR-style semantics
 6. If you're implementing `INotificationHandler`, use `ValueTask` instead of `Task`
 7. If you're implementing `IPipelineBehavior`, use `ValueTask` instead of `Task` and `IRequestHandlerNext<TRequest, TResponse> ` instead of  `RequestHandlerDelegate<TResponse>`
 8. Build and run your project — you’re all set!

@@ -1,6 +1,6 @@
 namespace MitMediator;
 
-public struct RequestPipelineTaskHandlers<TRequest, TResponse> : IRequestHandlerNext<TRequest, TResponse>
+internal struct RequestPipelineTaskHandlers<TRequest, TResponse> : IRequestHandlerNext<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
     private readonly IEnumerator<IPipelineBehavior<TRequest, TResponse>> _behaviors;

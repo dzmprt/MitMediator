@@ -6,6 +6,16 @@ namespace MitMediator;
 public interface IMediator
 {
     /// <summary>
+    /// Slow version of asynchronously send a request to a single handler.
+    /// Only for backwards compatible with MediatR.
+    /// </summary>
+    /// <param name="request">Request object.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+    /// <typeparam name="TResponse">Response type.</typeparam>
+    /// <returns>A task that represents the send operation. The task result contains the handler response.</returns>
+    Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken);
+    
+    /// <summary>
     /// Asynchronously send a request to a single handler.
     /// </summary>
     /// <param name="request">Request object.</param>

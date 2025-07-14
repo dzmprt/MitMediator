@@ -5,6 +5,12 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
+    /// <summary>
+    /// Inject IMediator, IRequestHandlers, IStreamRequestHandlers and INotificationHandlers
+    /// </summary>
+    /// <param name="services"><see cref="IServiceCollection"/>.</param>
+    /// <param name="assembly"><see cref="Assembly"/>.</param>
+    /// <returns><see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddMitMediator(this IServiceCollection services, params Assembly[] assembly)
     {
         var allTypes = assembly.SelectMany(a => a.GetTypes().Where(t => !t.IsAbstract)).ToArray();
@@ -17,6 +23,12 @@ public static class DependencyInjection
     }
 
 
+    /// <summary>
+    /// Inject IMediator, IRequestHandlers, IStreamRequestHandlers and INotificationHandlers from
+    /// AppDomain.CurrentDomain.GetAssemblies()
+    /// </summary>
+    /// <param name="services"><see cref="IServiceCollection"/>.</param>
+    /// <returns><see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddMitMediator(this IServiceCollection services)
     {
         return services.AddMitMediator(AppDomain.CurrentDomain.GetAssemblies());
