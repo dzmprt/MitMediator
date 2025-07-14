@@ -89,7 +89,7 @@ public class HandleTest
     }
     
     [Fact]
-    public async Task Send_BehaviorsRespectOrder()
+    public async Task Send_BehaviorsOrder()
     {
         // Arrange
         var request = new PingRequest();
@@ -142,7 +142,7 @@ public class HandleTest
     }
 
     [Fact]
-    public async Task Send_VoidRequest_BehaviorsRespectOrder()
+    public async Task Send_VoidRequest_BehaviorsOrder()
     {
         // Arrange
         var request = new VoidRequest();

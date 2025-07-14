@@ -39,4 +39,10 @@ public class BenchmarkSendWithVoidResult
     {
         await _mitMediatr.SendAsync(_mitVoidCommand, CancellationToken.None);
     }
+    
+    [Benchmark]
+    public async ValueTask MitMediator_SendRequest_BackwardsCompatibleWithMediatR_ReturnVoid()
+    {
+        await _mitMediatr.Send(_mitVoidCommand, CancellationToken.None);
+    }
 }

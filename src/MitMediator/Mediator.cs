@@ -1,6 +1,5 @@
-using System.Buffers;
-using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
+using MitMediator.Tasks;
 
 namespace MitMediator;
 
@@ -12,7 +11,22 @@ internal class Mediator : IMediator
     {
         _serviceProvider = serviceProvider;
     }
+    
+    public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
+    {
+        var requestType = request.GetType();
+        
+        var genericMethod = MediatRSendMethodInfo.SendMethod.GetOrAdd(requestType, _ =>
+        {
+            var responseType = typeof(TResponse);
+            return MediatRSendMethodInfo.SendGenericMethod.MakeGenericMethod(requestType, responseType);
+        });
+        
+        var result = genericMethod.Invoke(this, new object[] { request, cancellationToken })!;
 
+        return (Task<TResponse>)result;
+    }
+    
     public Task<TResponse> Send<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
         where TRequest : IRequest<TResponse>
     {
