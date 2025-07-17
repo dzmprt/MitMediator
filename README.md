@@ -1,14 +1,12 @@
 MitMediator
 =======
+## Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines
 [![Build and Test](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml/badge.svg)](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml)
 ![NuGet](https://img.shields.io/nuget/v/MitMediator)
 ![.NET 6.0](https://img.shields.io/badge/Version-.NET%206.0-informational?style=flat&logo=dotnet)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/MitMediator)
 ![License](https://img.shields.io/github/license/dzmprt/MitMediator)
-
-
-**MitMediator** is a lightweight and extensible mediator implementation inspired by MediatR. It supports pipeline behaviors with ordering, async handling, and seamless integration with the .NET dependency injection system
 
 ## ✨ Features
 
@@ -26,7 +24,7 @@ MitMediator
 ### Installation
 
 ```bash
-dotnet add package MitMediator -v 6.0.0-rc-3
+dotnet add package MitMediator -v 6.0.0
 ```
 
 ## Example Usage
@@ -96,7 +94,7 @@ To use `Task` instead of `ValueTask`, use `MitMediator.Tasks` namespase.
 
 You can reuse your existing handlers with minimal modifications — just update the namespaces and registration calls
 
-1. Add the `MitMediator` package `dotnet add package MitMediator -v 6.0.0-rc-3`
+1. Add the `MitMediator` package `dotnet add package MitMediator -v 6.0.0`
 2. In your request files, replace the namespace `MediatR` with `MitMediator`
 3. In your request handler files, replace the namespace `MediatR` with `MitMediator` (and`MitMediator.Tasks` for `Task` result)
 4. Update your dependency injection setup: replace `.AddMediatR(...)` with `.AddMitMediator()`

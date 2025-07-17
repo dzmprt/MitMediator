@@ -6,18 +6,25 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>MitMediator</PackageId> 
-        <Version>6.0.0-rc-3</Version> 
-        <Description>A lightweight mediator inspired by MediatR, featuring built-in ValueTask support.</Description> 
+        <Version>6.0.0</Version> 
+        <Description>Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines</Description> 
         <PackageProjectUrl>https://github.com/dzmprt/MitMediator</PackageProjectUrl> 
         <RepositoryUrl>https://github.com/dzmprt/MitMediator</RepositoryUrl> 
         <Authors>Dmitry Protko</Authors> 
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>logo.png</PackageIcon> 
-        <PackageTags>mediator;request;response;queries;commands;mitmediator;cqrs;</PackageTags> 
+        <PackageTags>mediator;request;response;queries;commands;mitmediator;cqrs;</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile> 
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance> 
-        <PackageReleaseNotes>6.0.0-rc-3
-            Add send method compatibility with MediatR-style semantics</PackageReleaseNotes> 
+        <PackageReleaseNotes>v6.0.0
+Supports IRequest&lt;TResponse&gt; and IRequest (void-style)
+Custom handlers via IRequestHandler&lt;,&gt; and IRequestHandler&lt;&gt;
+Supports both ValueTask (for modern, efficient handlers) and Task (for compatibility with MediatR-style handlers)
+Enables middleware-style pipelines using IPipelineBehavior&lt;TRequest, TResponse&gt;. A pipeline behavior can be defined for all or specific request types.
+Supports INotificationHandler with serial and parallel publishing
+Ordered execution of pipeline behaviors
+Simple registration through AddMitMediator() or assembly scanning
+Supports IStreamRequestHandle and IStreamPipelineBehavior</PackageReleaseNotes> 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
         <Title>MitMediator</Title>
         <TrimMode>full</TrimMode>
