@@ -14,7 +14,7 @@ public interface IMediator
     /// <typeparam name="TResponse">Response type.</typeparam>
     /// <returns>A task that represents the send operation. The task result contains the handler response.</returns>
     Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken);
-    
+
     /// <summary>
     /// Asynchronously send a request to a single handler.
     /// </summary>
@@ -24,7 +24,7 @@ public interface IMediator
     /// <typeparam name="TResponse">Response type.</typeparam>
     /// <returns>A task that represents the send operation. The task result contains the handler response.</returns>
     Task<TResponse> Send<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest<TResponse>;
-    
+
     /// <summary>
     /// Asynchronously send a request to a single handler.
     /// </summary>
@@ -33,7 +33,7 @@ public interface IMediator
     /// <typeparam name="TRequest"><see cref="TRequest"/></typeparam>
     /// <returns>A task that represents the send operation. The task result contains the handler response.</returns>
     Task Send<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest;
-    
+
     /// <summary>
     /// Asynchronously send a request to a single handler.
     /// </summary>
@@ -43,7 +43,7 @@ public interface IMediator
     /// <typeparam name="TResponse">Response type.</typeparam>
     /// <returns>A task that represents the send operation. The task result contains the handler response.</returns>
     ValueTask<TResponse> SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest<TResponse>;
-    
+
     /// <summary>
     /// Asynchronously send a request to a single handler.
     /// </summary>
@@ -51,15 +51,15 @@ public interface IMediator
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <typeparam name="TRequest"><see cref="TRequest"/></typeparam>
     /// <returns>A task that represents the send operation. The task result contains the handler response.</returns>
-    ValueTask<Unit>  SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest;
-    
+    ValueTask<Unit> SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest;
+
     /// <summary>
     /// Asynchronously publishes a notification to all registered handlers.
     /// </summary>
     /// <param name="notification">Notification.</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <typeparam name="TNotification">Notification type.</typeparam>
-    /// <returns></returns>
+    /// <returns><see cref="ValueTask"/>.</returns>
     ValueTask PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken)
         where TNotification : INotification;
 
@@ -69,7 +69,7 @@ public interface IMediator
     /// <param name="notification">Notification.</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <typeparam name="TNotification">Notification type.</typeparam>
-    /// <returns></returns>
+    /// <returns><see cref="Task"/>.</returns>
     Task PublishParallelAsync<TNotification>(
         TNotification notification,
         CancellationToken cancellationToken = default)

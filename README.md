@@ -27,14 +27,16 @@ MitMediator
 dotnet add package MitMediator -v 7.0.0-alfa
 ```
 
-## Example Usage
+### ⚙️ Example Usage
 
-### Simple application with PingRequest, PingRequestHandler and two behaviors.
+This example shows a basic setup of MitMediator that demonstrates:
+* Request handling via PingRequestHandler
+* Notification publishing via NotificationHandler
+* Two pipeline behaviors: HeightBehavior and LowBehavior
 
 ```cs
 using Microsoft.Extensions.DependencyInjection;
 using MitMediator;
-
 
 var services = new ServiceCollection();
 services
@@ -45,11 +47,12 @@ services
 var provider = services.BuildServiceProvider();
 var mediator = provider.GetRequiredService<IMediator>();
 
-//HeightBehavior: Handling PingRequest
-//LowBehavior: Handling PingRequest
-//PingRequestHandler: Pong
-//LowBehavior: Handled PingRequest
-//HeightBehavior: Handled PingRequest
+// HeightBehavior: Handling PingRequest
+// LowBehavior: Handling PingRequest
+// PingRequestHandler: Pong
+// NotificationHandler: Notification!
+// LowBehavior: Handled PingRequest
+// HeightBehavior: Handled PingRequest
 string result = await mediator.SendAsync<PingRequest, string>(new PingRequest(), CancellationToken.None);
 
 Console.WriteLine(result); //Pong result
@@ -58,9 +61,17 @@ public class PingRequest : IRequest<string> { }
 
 public class PingRequestHandler : IRequestHandler<PingRequest, string>
 {
+    private readonly IMediator _mediator;
+
+    public PingRequestHandler(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+    
     public ValueTask<string> HandleAsync(PingRequest request, CancellationToken cancellationToken)
     {
         Console.WriteLine("PingRequestHandler: Pong");
+        _mediator.PublishAsync(new Notification(), cancellationToken);
         return ValueTask.FromResult("Pong result");
     }
 }
@@ -86,9 +97,20 @@ public class HeightBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, T
         return result;
     }
 }
+
+public class Notification : INotification{}
+
+public class NotificationHandler : INotificationHandler<Notification>
+{
+    public ValueTask HandleAsync(Notification notification, CancellationToken cancellationToken)
+    {
+        Console.WriteLine($"NotificationHandler: Notification!");
+        return ValueTask.CompletedTask;
+    }
+}
 ```
 
-To use `Task` instead of `ValueTask`, use `MitMediator.Tasks` namespase.
+> To use `Task` instead of `ValueTask` for handlers, reference the MitMediator.Tasks namespace
 
 ### 🔁 Migrating from MediatR
 
@@ -108,7 +130,7 @@ You can reuse your existing handlers with minimal modifications — just update 
 
 MitMediator is designed to feel familiar for those coming from MediatR. Core concepts like IRequest, IRequestHandle, and pipeline behaviors are preserved — but with a cleaner interface and support for ValueTask out of the box.
 
-### 🔍 Comparison: MitMediator vs. MediatR
+## 🔍 Comparison: MitMediator vs. MediatR
 
 ### Performance
 

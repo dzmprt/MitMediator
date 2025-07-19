@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="MitMediator Rules" Description="Custom rules for MitMediator project" ToolsVersion="15.0">
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
+    <Rule Id="CS*" Action="Error" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.NetAnalyzers">
+    <Rule Id="CA*" Action="Error" />
+    <Rule Id="IDE*" Action="Error" />
+  </Rules>
+</RuleSet> 

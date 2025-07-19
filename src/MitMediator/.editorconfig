@@ -1,0 +1,58 @@
+# .editorconfig for MitMediator
+root = true
+
+[*.cs]
+# C# files
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Treat all code style suggestions as errors
+# (IDE, Style, Naming, etc.)
+dotnet_analyzer_diagnostic.severity = error
+
+# Require explicit types
+csharp_style_var_for_built_in_types = true:none
+csharp_style_var_when_type_is_apparent = false:error
+csharp_style_var_elsewhere = true:none
+
+# Require braces for all control blocks
+csharp_prefer_braces = true:error
+
+# Require expression-bodied members only for properties
+csharp_style_expression_bodied_methods = false:error
+csharp_style_expression_bodied_properties = true:error
+
+# Require 'this.' qualification
+dotnet_style_qualification_for_field = false:none
+dotnet_style_qualification_for_property = false:none
+dotnet_style_qualification_for_method = false:none
+dotnet_style_qualification_for_event = false:none
+
+# Naming rules
+# (Example: private fields must be _camelCase)
+dotnet_naming_rule.private_fields_should_be_camel_case.severity = error
+dotnet_naming_rule.private_fields_should_be_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_should_be_camel_case.style = underscore_camel_case_style
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.underscore_camel_case_style.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case_style.required_prefix = _
+
+# Remove unused usings
+dotnet_separate_import_directive_groups = true:error
+
+# File must end with newline
+insert_final_newline = true 
+# Disable IDE0160 (Remove redundant equality operator)
+dotnet_diagnostic.IDE0160.severity = none 
+# Disable IDE0008 (Use explicit type)
+dotnet_diagnostic.IDE0008.severity = none 
+# Disable IDE0046 (Convert to conditional expression)
+dotnet_diagnostic.IDE0046.severity = none 
+# Disable IDE0009 (Add 'this.' qualification)
+dotnet_diagnostic.IDE0009.severity = none

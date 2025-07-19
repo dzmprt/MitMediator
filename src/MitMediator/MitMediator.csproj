@@ -21,6 +21,18 @@ Update .NET version to 7</PackageReleaseNotes>
         <Title>MitMediator</Title>
         <TrimMode>full</TrimMode>
         <TargetFramework>net7.0</TargetFramework>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <WarningsAsErrors>CA*,CS*,SA*</WarningsAsErrors>
+        <CodeAnalysisRuleSet>MitMediator.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile />
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile />
     </PropertyGroup>
 
     <ItemGroup>
@@ -36,6 +48,10 @@ Update .NET version to 7</PackageReleaseNotes>
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     </ItemGroup>
 
