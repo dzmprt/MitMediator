@@ -8,7 +8,7 @@ using MitMediator;
 namespace Benchmarks;
 
 [MemoryDiagnoser]
-[SimpleJob(RuntimeMoniker.Net70)]
+[SimpleJob(RuntimeMoniker.Net80)]
 public class BenchmarkSendWithStreamResultAndBehaviors
 {
     private MitMediator.IMediator _mitMediatr;

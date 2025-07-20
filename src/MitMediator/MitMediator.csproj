@@ -20,7 +20,7 @@ Updated target framework to .NET 7</PackageReleaseNotes>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
         <Title>MitMediator</Title>
         <TrimMode>full</TrimMode>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <AnalysisLevel>latest</AnalysisLevel>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <WarningsAsErrors>CA*,CS*,SA*</WarningsAsErrors>
@@ -48,11 +48,11 @@ Updated target framework to .NET 7</PackageReleaseNotes>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4">
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     </ItemGroup>
 
     <ItemGroup>
