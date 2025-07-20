@@ -5,5 +5,5 @@ namespace MitMediator;
 /// </summary>
 public interface INotification
 {
-    
+
 }

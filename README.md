@@ -3,7 +3,7 @@ MitMediator
 ## Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines
 [![Build and Test](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml/badge.svg)](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml)
 ![NuGet](https://img.shields.io/nuget/v/MitMediator)
-![.NET 6.0](https://img.shields.io/badge/Version-.NET%206.0-informational?style=flat&logo=dotnet)
+![.NET 7.0](https://img.shields.io/badge/Version-.NET%207.0-informational?style=flat&logo=dotnet)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/MitMediator)
 ![License](https://img.shields.io/github/license/dzmprt/MitMediator)
@@ -24,17 +24,19 @@ MitMediator
 ### Installation
 
 ```bash
-dotnet add package MitMediator -v 6.0.0
+dotnet add package MitMediator -v 7.0.0
 ```
 
-## Example Usage
+### ⚙️ Example Usage
 
-### Simple application with PingRequest, PingRequestHandler and two behaviors.
+This example shows a basic setup of MitMediator that demonstrates:
+* Request handling via PingRequestHandler
+* Notification publishing via NotificationHandler
+* Two pipeline behaviors: HeightBehavior and LowBehavior
 
 ```cs
 using Microsoft.Extensions.DependencyInjection;
 using MitMediator;
-
 
 var services = new ServiceCollection();
 services
@@ -45,11 +47,12 @@ services
 var provider = services.BuildServiceProvider();
 var mediator = provider.GetRequiredService<IMediator>();
 
-//HeightBehavior: Handling PingRequest
-//LowBehavior: Handling PingRequest
-//PingRequestHandler: Pong
-//LowBehavior: Handled PingRequest
-//HeightBehavior: Handled PingRequest
+// HeightBehavior: Handling PingRequest
+// LowBehavior: Handling PingRequest
+// PingRequestHandler: Pong
+// NotificationHandler: Notification!
+// LowBehavior: Handled PingRequest
+// HeightBehavior: Handled PingRequest
 string result = await mediator.SendAsync<PingRequest, string>(new PingRequest(), CancellationToken.None);
 
 Console.WriteLine(result); //Pong result
@@ -58,9 +61,17 @@ public class PingRequest : IRequest<string> { }
 
 public class PingRequestHandler : IRequestHandler<PingRequest, string>
 {
+    private readonly IMediator _mediator;
+
+    public PingRequestHandler(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+    
     public ValueTask<string> HandleAsync(PingRequest request, CancellationToken cancellationToken)
     {
         Console.WriteLine("PingRequestHandler: Pong");
+        _mediator.PublishAsync(new Notification(), cancellationToken);
         return ValueTask.FromResult("Pong result");
     }
 }
@@ -86,15 +97,26 @@ public class HeightBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, T
         return result;
     }
 }
+
+public class Notification : INotification{}
+
+public class NotificationHandler : INotificationHandler<Notification>
+{
+    public ValueTask HandleAsync(Notification notification, CancellationToken cancellationToken)
+    {
+        Console.WriteLine($"NotificationHandler: Notification!");
+        return ValueTask.CompletedTask;
+    }
+}
 ```
 
-To use `Task` instead of `ValueTask`, use `MitMediator.Tasks` namespase.
+> To use `Task` instead of `ValueTask` for handlers, reference the MitMediator.Tasks namespace
 
 ### 🔁 Migrating from MediatR
 
 You can reuse your existing handlers with minimal modifications — just update the namespaces and registration calls
 
-1. Add the `MitMediator` package `dotnet add package MitMediator -v 6.0.0`
+1. Add the `MitMediator` package `dotnet add package MitMediator -v 7.0.0`
 2. In your request files, replace the namespace `MediatR` with `MitMediator`
 3. In your request handler files, replace the namespace `MediatR` with `MitMediator` (and`MitMediator.Tasks` for `Task` result)
 4. Update your dependency injection setup: replace `.AddMediatR(...)` with `.AddMitMediator()`
@@ -108,22 +130,22 @@ You can reuse your existing handlers with minimal modifications — just update 
 
 MitMediator is designed to feel familiar for those coming from MediatR. Core concepts like IRequest, IRequestHandle, and pipeline behaviors are preserved — but with a cleaner interface and support for ValueTask out of the box.
 
-### 🔍 Comparison: MitMediator vs. MediatR
+## 🔍 Comparison: MitMediator vs. MediatR
 
 ### Performance
 
 | Mediator    | Method                                     | Mean (ns) | Allocated (B) |
 |-------------|--------------------------------------------|----------:|--------------:|
-| MediatR     | Send (return result)                       |     261.2 |           384 |
-| MitMediator | SendAsync (return result)                  | **107.6** |         **0** |
-| MediatR     | Send (return result, use behaviors)        |     456.7 |           864 |
-| MitMediator | SendAsync (return result, use behaviors)   | **101.6** |         **0** |
-| MediatR     | Send (Return void)                         |     229.5 |           312 |
-| MitMediator | SendAsync (Return void)                    | **101.0** |         **0** |
-| MediatR     | Publish                                    |     379.1 |           592 |
-| MitMediator | PublishAsync                               | **113.6** |        **32** |
-| MediatR     | CreateStream (return stream, use behavior) |   1,447.0 |          1200 |
-| MitMediator | CreateStream (return stream, use behavior) | **340.7** |       **120** |
+| MediatR     | Send (return result)                       |     167.5 |           384 |
+| MitMediator | SendAsync (return result)                  | **69.99** |         **0** |
+| MediatR     | Send (return result, use behaviors)        |    282.76 |           864 |
+| MitMediator | SendAsync (return result, use behaviors)   | **68.26** |         **0** |
+| MediatR     | Send (Return void)                         |    158.71 |           312 |
+| MitMediator | SendAsync (Return void)                    | **67.15** |         **0** |
+| MediatR     | Publish                                    |    200.52 |           592 |
+| MitMediator | PublishAsync                               | **75.52** |        **32** |
+| MediatR     | CreateStream (return stream, use behavior) |   1,260.9 |          1200 |
+| MitMediator | CreateStream (return stream, use behavior) | **268.9** |       **120** |
 
 ### Features
 

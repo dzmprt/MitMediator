@@ -14,6 +14,6 @@ internal static class MediatRSendMethodInfo
                     && m.IsGenericMethodDefinition
                     && m.GetGenericArguments().Length == 2
                     && m.GetParameters().Length == 2);
-    
+
     public static ConcurrentDictionary<Type, MethodInfo> SendMethod { get; } = new();
 }

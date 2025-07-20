@@ -34,10 +34,10 @@ public class StreamPipelineBehaviorTests
 
         public async IAsyncEnumerable<int> HandleAsync(
             StreamQuery request,
-            IAsyncEnumerable<int> next,
+            IAsyncEnumerable<int> nextPipe,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            await foreach (var item in next.WithCancellation(cancellationToken))
+            await foreach (var item in nextPipe.WithCancellation(cancellationToken))
             {
                 yield return item * Multiplier;
             }
