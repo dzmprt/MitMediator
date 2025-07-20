@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>MitMediator</PackageId> 
-        <Version>7.0.0</Version> 
+        <Version>8.0.0-alfa</Version> 
         <Description>Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines</Description> 
         <PackageProjectUrl>https://github.com/dzmprt/MitMediator</PackageProjectUrl> 
         <RepositoryUrl>https://github.com/dzmprt/MitMediator</RepositoryUrl> 
@@ -15,8 +15,8 @@
         <PackageTags>mediator;request;response;queries;commands;mitmediator;cqrs;</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile> 
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance> 
-        <PackageReleaseNotes>v7.0.0
-Updated target framework to .NET 7</PackageReleaseNotes> 
+        <PackageReleaseNotes>v8.0.0-alfa
+Updated target framework to .NET 8</PackageReleaseNotes> 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
         <Title>MitMediator</Title>
         <TrimMode>full</TrimMode>
