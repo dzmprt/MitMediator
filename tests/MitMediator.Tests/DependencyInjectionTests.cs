@@ -99,4 +99,22 @@ public class DependencyInjectionTests
         Assert.NotNull(handler);
         Assert.IsType<SampleRequestHandler>(handler);
     }
+    
+    [Fact]
+    public void AddOnlyMitMediator_Registers_Mediator()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act
+        services.AddOnlyMitMediator();
+        var provider = services.BuildServiceProvider();
+
+        // Assert
+        var mediator = provider.GetService<IMediator>();
+        Assert.NotNull(mediator);
+
+        var handler = provider.GetService<IRequestHandler<SampleRequest, string>>();
+        Assert.Null(handler);
+    }
 }

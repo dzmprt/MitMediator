@@ -25,6 +25,7 @@ Updated target framework to .NET 8</PackageReleaseNotes>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <WarningsAsErrors>CA*,CS*,SA*</WarningsAsErrors>
         <CodeAnalysisRuleSet>MitMediator.ruleset</CodeAnalysisRuleSet>
+        <LangVersion>12</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

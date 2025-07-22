@@ -2,8 +2,7 @@
 using MitMediator;
 
 var services = new ServiceCollection();
-services
-    .AddScoped<IMediator, Mediator>()
+services.AddOnlyMitMediator()
     .AddTransient<IRequestHandler<PingRequest, string>, PingRequestHandler>()
     .AddTransient<IRequestHandler<PingRequest, string>, PingRequestHandler>()
     .AddTransient<INotificationHandler<Notification>, NotificationHandler>()

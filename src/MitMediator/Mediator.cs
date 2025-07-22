@@ -3,7 +3,7 @@ using MitMediator.Tasks;
 
 namespace MitMediator;
 
-public class Mediator(IServiceProvider serviceProvider) : IMediator
+internal class Mediator(IServiceProvider serviceProvider) : IMediator
 {
     public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
     {
