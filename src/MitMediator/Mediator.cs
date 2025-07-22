@@ -3,15 +3,8 @@ using MitMediator.Tasks;
 
 namespace MitMediator;
 
-internal class Mediator : IMediator
+internal class Mediator(IServiceProvider serviceProvider) : IMediator
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public Mediator(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
-
     public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
     {
         var requestType = request.GetType();
@@ -22,7 +15,7 @@ internal class Mediator : IMediator
             return MediatRSendMethodInfo.SendGenericMethod.MakeGenericMethod(requestType, responseType);
         });
 
-        var result = genericMethod.Invoke(this, new object[] { request, cancellationToken })!;
+        var result = genericMethod.Invoke(this, [request, cancellationToken])!;
 
         return (Task<TResponse>)result;
     }
@@ -30,10 +23,10 @@ internal class Mediator : IMediator
     public Task<TResponse> Send<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
         where TRequest : IRequest<TResponse>
     {
-        var behaviors = _serviceProvider
+        var behaviors = serviceProvider
             .GetServices<IPipelineBehavior<TRequest, TResponse>>();
 
-        var requestHandler = _serviceProvider
+        var requestHandler = serviceProvider
             .GetRequiredService<Tasks.IRequestHandler<TRequest, TResponse>>();
 
         using var behaviorEnumerator = behaviors.GetEnumerator();
@@ -43,10 +36,10 @@ internal class Mediator : IMediator
 
     public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken) where TRequest : IRequest
     {
-        var requestHandler = _serviceProvider
+        var requestHandler = serviceProvider
             .GetRequiredService<Tasks.IRequestHandler<TRequest>>();
 
-        var behaviors = _serviceProvider
+        var behaviors = serviceProvider
             .GetServices<IPipelineBehavior<TRequest, Unit>>();
 
         using var behaviorEnumerator = behaviors.GetEnumerator();
@@ -59,10 +52,10 @@ internal class Mediator : IMediator
         CancellationToken cancellationToken)
         where TRequest : IRequest<TResponse>
     {
-        var requestHandler = _serviceProvider
+        var requestHandler = serviceProvider
             .GetRequiredService<IRequestHandler<TRequest, TResponse>>();
 
-        var behaviors = _serviceProvider
+        var behaviors = serviceProvider
             .GetServices<IPipelineBehavior<TRequest, TResponse>>();
 
         using var behaviorEnumerator = behaviors.GetEnumerator();
@@ -73,10 +66,10 @@ internal class Mediator : IMediator
     public ValueTask<Unit> SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken)
         where TRequest : IRequest
     {
-        var requestHandler = _serviceProvider
+        var requestHandler = serviceProvider
             .GetRequiredService<IRequestHandler<TRequest>>();
 
-        var behaviors = _serviceProvider
+        var behaviors = serviceProvider
             .GetServices<IPipelineBehavior<TRequest, Unit>>();
 
         using var behaviorEnumerator = behaviors.GetEnumerator();
@@ -89,7 +82,7 @@ internal class Mediator : IMediator
         CancellationToken cancellationToken)
         where TNotification : INotification
     {
-        var notificationHandlers = _serviceProvider.GetServices<INotificationHandler<TNotification>>();
+        var notificationHandlers = serviceProvider.GetServices<INotificationHandler<TNotification>>();
         foreach (var notificationHandler in notificationHandlers)
         {
             await notificationHandler.HandleAsync(notification, cancellationToken);
@@ -101,7 +94,7 @@ internal class Mediator : IMediator
         CancellationToken cancellationToken)
         where TNotification : INotification
     {
-        var handlers = _serviceProvider
+        var handlers = serviceProvider
             .GetServices<INotificationHandler<TNotification>>()
             .ToArray();
 
@@ -120,10 +113,10 @@ internal class Mediator : IMediator
     public IAsyncEnumerable<TResponse> CreateStream<TRequest, TResponse>(TRequest request,
         CancellationToken cancellationToken) where TRequest : IStreamRequest<TResponse>
     {
-        var behaviors = _serviceProvider
+        var behaviors = serviceProvider
             .GetServices<IStreamPipelineBehavior<TRequest, TResponse>>();
 
-        var requestHandler = _serviceProvider
+        var requestHandler = serviceProvider
             .GetRequiredService<IStreamRequestHandler<TRequest, TResponse>>();
 
         var next = requestHandler.HandleAsync(request, cancellationToken);

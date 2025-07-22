@@ -9,7 +9,7 @@ public class HandleTestForCompatibleWithMediatRSend
     
 
     [Fact]
-    public async ValueTask Send_TRequestTResponse_InvokesHandler()
+    public async Task Send_TRequestTResponse_InvokesHandler()
     {
         // Arrange
         var request = new PingRequest();

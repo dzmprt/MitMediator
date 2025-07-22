@@ -10,8 +10,7 @@ internal static class MediatRSendMethodInfo
 {
     public static readonly MethodInfo SendGenericMethod = typeof(Mediator)
         .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-        .First(m => m.Name == "Send"
-                    && m.IsGenericMethodDefinition
+        .First(m => m is { Name: "Send", IsGenericMethodDefinition: true }
                     && m.GetGenericArguments().Length == 2
                     && m.GetParameters().Length == 2);
 

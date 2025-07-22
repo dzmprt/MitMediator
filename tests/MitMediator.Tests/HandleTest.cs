@@ -12,7 +12,7 @@ public class HandleTest
     public class VoidRequest : IRequest { }
 
     [Fact]
-    public async ValueTask Send_TRequestTResponse_InvokesHandler()
+    public async Task Send_TRequestTResponse_InvokesHandler()
     {
         // Arrange
         var request = new PingRequest();
@@ -39,7 +39,7 @@ public class HandleTest
     }
 
     [Fact]
-    public async ValueTask Send_TRequest_InvokesHandler()
+    public async Task Send_TRequest_InvokesHandler()
     {
         // Arrange
         var request = new PongRequest();

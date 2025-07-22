@@ -18,7 +18,7 @@ public class HandleAsyncTests
     }
 
     [Fact]
-    public async ValueTask SendAsync_TRequestTResponse_InvokesHandler()
+    public async Task SendAsync_TRequestTResponse_InvokesHandler()
     {
         // Arrange
         var request = new PingRequest();
@@ -45,7 +45,7 @@ public class HandleAsyncTests
     }
 
     [Fact]
-    public async ValueTask SendAsync_TRequest_InvokesHandler()
+    public async Task SendAsync_TRequest_InvokesHandler()
     {
         // Arrange
         var request = new PongRequest();

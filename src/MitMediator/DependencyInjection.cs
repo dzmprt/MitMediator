@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using MitMediator;
 
@@ -13,6 +14,7 @@ public static class DependencyInjection
     /// <param name="services"><see cref="IServiceCollection"/>.</param>
     /// <param name="assembly"><see cref="Assembly"/>.</param>
     /// <returns><see cref="IServiceCollection"/>.</returns>
+    [RequiresDynamicCode("This function is incompatible with Native AOT. Use AddOnlyMitMediator and register handlers manually.")]
     public static IServiceCollection AddMitMediator(this IServiceCollection services, params Assembly[] assembly)
     {
         var allTypes = assembly.SelectMany(a => a.GetTypes().Where(t => !t.IsAbstract)).ToArray();
@@ -31,9 +33,19 @@ public static class DependencyInjection
     /// </summary>
     /// <param name="services"><see cref="IServiceCollection"/>.</param>
     /// <returns><see cref="IServiceCollection"/>.</returns>
+    [RequiresDynamicCode("This function is incompatible with Native AOT. Use AddOnlyMitMediator and register handlers manually.")]
     public static IServiceCollection AddMitMediator(this IServiceCollection services)
     {
         return services.AddMitMediator(AppDomain.CurrentDomain.GetAssemblies());
+    }
+
+    /// <summary>
+    /// Inject IMediator.
+    /// </summary>
+    /// <param name="services"></param>
+    public static IServiceCollection AddOnlyMitMediator(this IServiceCollection services)
+    {
+        return services.AddScoped<IMediator, Mediator>();
     }
 
     private static IServiceCollection AddNotificationHandlers(this IServiceCollection services, Type[] allTypes)

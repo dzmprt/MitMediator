@@ -4,7 +4,4 @@ namespace MitMediator;
 /// Requests that return a streaming response.
 /// </summary>
 /// <typeparam name="TResponse">Response type</typeparam>
-public interface IStreamRequest<out TResponse>
-{
-
-}
+public interface IStreamRequest<out TResponse>;

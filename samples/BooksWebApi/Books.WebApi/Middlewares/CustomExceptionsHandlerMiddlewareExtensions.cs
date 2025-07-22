@@ -14,7 +14,7 @@ internal class CustomExceptionsHandlerMiddleware
     /// <summary>
     /// Initializes a new instance of <see cref="CustomExceptionsHandlerMiddleware"/>.
     /// </summary>
-    /// <param name="next">Next delefate.</param>
+    /// <param name="next">Next delegate.</param>
     public CustomExceptionsHandlerMiddleware(RequestDelegate next)
     {
         _next = next;
