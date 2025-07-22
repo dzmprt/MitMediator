@@ -9,6 +9,10 @@
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
+    </PropertyGroup>
+    
     <ItemGroup>
       <ProjectReference Include="..\..\src\MitMediator\MitMediator.csproj" />
     </ItemGroup>
