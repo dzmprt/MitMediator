@@ -2,8 +2,8 @@
 using BenchmarkDotNet.Running;
 using Benchmarks;
 
-//BenchmarkRunner.Run<BenchmarkSendWithResult>();
-//BenchmarkRunner.Run<BenchmarkSendWithResultAndBehaviors>();
-//BenchmarkRunner.Run<BenchmarkSendWithVoidResult>();
-//BenchmarkRunner.Run<BenchmarkPublishNotification>();
+// BenchmarkRunner.Run<BenchmarkSendWithResult>();
+// BenchmarkRunner.Run<BenchmarkSendWithResultAndBehaviors>();
+// BenchmarkRunner.Run<BenchmarkSendWithVoidResult>();
+// BenchmarkRunner.Run<BenchmarkPublishNotification>();
 BenchmarkRunner.Run<BenchmarkSendWithStreamResultAndBehaviors>();
