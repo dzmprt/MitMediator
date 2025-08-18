@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>MitMediator</PackageId> 
-        <Version>9.0.0-alfa</Version> 
+        <Version>9.0.0</Version> 
         <Description>Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines</Description> 
         <PackageProjectUrl>https://github.com/dzmprt/MitMediator</PackageProjectUrl> 
         <RepositoryUrl>https://github.com/dzmprt/MitMediator</RepositoryUrl> 
@@ -15,7 +15,7 @@
         <PackageTags>mediator;request;response;queries;commands;mitmediator;cqrs;</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile> 
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance> 
-        <PackageReleaseNotes>v9.0.0-alfa
+        <PackageReleaseNotes>v9.0.0
 Updated target framework to .NET 9</PackageReleaseNotes> 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
         <Title>MitMediator</Title>
@@ -53,7 +53,7 @@ Updated target framework to .NET 9</PackageReleaseNotes>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
