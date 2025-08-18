@@ -1,7 +1,6 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using System.Linq;
 
 namespace MitMediator.Tests;
 
@@ -89,7 +88,7 @@ public class StreamPipelineBehaviorTests
 
         behavior1
             .Setup(b => b.HandleAsync(request, It.IsAny<IAsyncEnumerable<string>>(), It.IsAny<CancellationToken>()))
-            .Returns((MyStreamRequest r, IAsyncEnumerable<string> next, CancellationToken ct) =>
+            .Returns((MyStreamRequest _, IAsyncEnumerable<string> next, CancellationToken ct) =>
             {
                 callOrder.Add("behavior1:start");
                 return new AsyncEnumerableStub<string>(next, s =>
@@ -100,7 +99,7 @@ public class StreamPipelineBehaviorTests
 
         behavior2
             .Setup(b => b.HandleAsync(request, It.IsAny<IAsyncEnumerable<string>>(), It.IsAny<CancellationToken>()))
-            .Returns((MyStreamRequest r, IAsyncEnumerable<string> next, CancellationToken ct) =>
+            .Returns((MyStreamRequest _, IAsyncEnumerable<string> next, CancellationToken ct) =>
             {
                 callOrder.Add("behavior2:start");
                 return new AsyncEnumerableStub<string>(next, s =>

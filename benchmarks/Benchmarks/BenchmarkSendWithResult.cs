@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Benchmarks;
 
 [MemoryDiagnoser]
-[SimpleJob(RuntimeMoniker.Net80)]
+[SimpleJob(RuntimeMoniker.Net90)]
 public class BenchmarkSendWithResult
 {
     private MitMediator.IMediator _mitMediatr;
@@ -38,11 +38,5 @@ public class BenchmarkSendWithResult
     public async ValueTask<string> MitMediator_SendRequest_ReturnResult()
     {
         return await _mitMediatr.SendAsync<MitPingCommand, string>(_mitRequest, CancellationToken.None);
-    }
-    
-    [Benchmark]
-    public async ValueTask<string> MitMediator_SendRequest_BackwardsCompatibleWithMediatR_ReturnResult()
-    {
-        return await _mitMediatr.Send(_mitRequest, CancellationToken.None);
     }
 }

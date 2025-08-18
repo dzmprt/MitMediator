@@ -3,7 +3,7 @@ MitMediator
 ## Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines
 [![Build and Test](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml/badge.svg)](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml)
 ![NuGet](https://img.shields.io/nuget/v/MitMediator)
-![.NET 8.0](https://img.shields.io/badge/Version-.NET%208.0-informational?style=flat&logo=dotnet)
+![.NET 9.0](https://img.shields.io/badge/Version-.NET%208.0-informational?style=flat&logo=dotnet)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/MitMediator)
 ![License](https://img.shields.io/github/license/dzmprt/MitMediator)
@@ -24,7 +24,7 @@ MitMediator
 ### Installation
 
 ```bash
-dotnet add package MitMediator -v 8.0.0
+dotnet add package MitMediator -v 9.0.0
 ```
 
 ### ⚙️ Example Usage
@@ -116,7 +116,7 @@ public class NotificationHandler : INotificationHandler<Notification>
 
 You can reuse your existing handlers with minimal modifications — just update the namespaces and registration calls
 
-1. Add the `MitMediator` package `dotnet add package MitMediator -v 8.0.0`
+1. Add the `MitMediator` package `dotnet add package MitMediator -v 9.0.0`
 2. In your request files, replace the namespace `MediatR` with `MitMediator`
 3. In your request handler files, replace the namespace `MediatR` with `MitMediator` (and`MitMediator.Tasks` for `Task` result)
 4. Update your dependency injection setup: replace `.AddMediatR(...)` with `.AddMitMediator()`
@@ -136,16 +136,16 @@ MitMediator is designed to feel familiar for those coming from MediatR. Core con
 
 | Mediator    | Method                                     | Mean (ns) | Allocated (B) |
 |-------------|--------------------------------------------|----------:|--------------:|
-| MediatR     | Send (return result)                       |    105.48 |           384 |
-| MitMediator | SendAsync (return result)                  | **51.32** |         **0** |
-| MediatR     | Send (return result, use behaviors)        |    211.93 |           864 |
-| MitMediator | SendAsync (return result, use behaviors)   | **51.27** |         **0** |
-| MediatR     | Send (Return void)                         |     92.09 |           240 |
-| MitMediator | SendAsync (Return void)                    | **50.49** |         **0** |
-| MediatR     | Publish                                    |    160.61 |           592 |
-| MitMediator | PublishAsync                               | **58.06** |        **32** |
-| MediatR     | CreateStream (return stream, use behavior) |     957.8 |          1168 |
-| MitMediator | CreateStream (return stream, use behavior) | **205.9** |       **112** |
+| MediatR     | Send (return result)                       |     90.52 |           336 |
+| MitMediator | SendAsync (return result)                  | **51.81** |         **0** |
+| MediatR     | Send (return result, use behaviors)        |    217.60 |           864 |
+| MitMediator | SendAsync (return result, use behaviors)   | **52.20** |         **0** |
+| MediatR     | Send (Return void)                         |     74.97 |           192 |
+| MitMediator | SendAsync (Return void)                    | **51.85** |         **0** |
+| MediatR     | Publish                                    |    156.26 |           592 |
+| MitMediator | PublishAsync                               | **58.10** |        **32** |
+| MediatR     | CreateStream (return stream, use behavior) |     940.0 |          1168 |
+| MitMediator | CreateStream (return stream, use behavior) | **203.3** |       **112** |
 
 ### Features
 
