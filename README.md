@@ -3,7 +3,7 @@ MitMediator
 ## Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines
 [![Build and Test](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml/badge.svg)](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml)
 ![NuGet](https://img.shields.io/nuget/v/MitMediator)
-![.NET 9.0](https://img.shields.io/badge/Version-.NET%208.0-informational?style=flat&logo=dotnet)
+![.NET 9.0](https://img.shields.io/badge/Version-.NET%209.0-informational?style=flat&logo=dotnet)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/MitMediator)
 ![License](https://img.shields.io/github/license/dzmprt/MitMediator)
