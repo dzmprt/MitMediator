@@ -8,7 +8,7 @@ MitMediator
 ![NuGet Downloads](https://img.shields.io/nuget/dt/MitMediator)
 ![License](https://img.shields.io/github/license/dzmprt/MitMediator)
 
-## ✨ Features
+## Features
 
 - Supports `IRequest<TResponse>` and `IRequest` (void-style)
 - Custom handlers via `IRequestHandler<,>` and `IRequestHandler<>`
@@ -27,7 +27,7 @@ MitMediator
 dotnet add package MitMediator -v 9.0.0
 ```
 
-### ⚙️ Example Usage
+### Example Usage
 
 This example shows a basic setup of MitMediator that demonstrates:
 * Request handling via PingRequestHandler
@@ -112,7 +112,7 @@ public class NotificationHandler : INotificationHandler<Notification>
 
 > To use `Task` instead of `ValueTask` for handlers, reference the MitMediator.Tasks namespace
 
-### 🔁 Migrating from MediatR
+### Migrating from MediatR
 
 You can reuse your existing handlers with minimal modifications — just update the namespaces and registration calls
 
@@ -130,7 +130,7 @@ You can reuse your existing handlers with minimal modifications — just update 
 
 MitMediator is designed to feel familiar for those coming from MediatR. Core concepts like IRequest, IRequestHandle, and pipeline behaviors are preserved — but with a cleaner interface and support for ValueTask out of the box.
 
-## 🔍 Comparison: MitMediator vs. MediatR
+## Comparison: MitMediator vs. MediatR
 
 ### Performance
 
@@ -159,7 +159,7 @@ MitMediator is designed to feel familiar for those coming from MediatR. Core con
 | **Performance Focus**       | Async-first, zero-allocation for `ValueTask`               | Flexible but not optimized for `ValueTask`                    |
 | **License & Availability**  | MIT                                                        | Reciprocal Public License 1.5 (RPL1.5) and commercial license |
 
-## 🧪 Testing
+## Testing
 
 This project includes comprehensive unit tests with **100% code coverage**. All tests are included in the repository
 
@@ -169,7 +169,7 @@ This project includes comprehensive unit tests with **100% code coverage**. All 
 - [MitMediator.AppAuthorize](https://github.com/dzmprt/MitMediator.AppAuthorize) - authentication and authorization via basic auth or JWT bearer tokens
 
 
-## 📜 License
+## License
 
 MIT
 
