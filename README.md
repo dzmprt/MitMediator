@@ -165,7 +165,9 @@ This project includes comprehensive unit tests with **100% code coverage**. All 
 
 ## 🧩 Extensions
 
-[MitMediator.AutoApi](https://github.com/dzmprt/MitMediator.AutoApi) - automatic creation of API endpoints for requests
+- [MitMediator.AutoApi](https://github.com/dzmprt/MitMediator.AutoApi) - auto-registers API endpoints and generates HTTP clients from request types
+- [MitMediator.AppAuthorize](https://github.com/dzmprt/MitMediator.AppAuthorize) - authentication and authorization via basic auth or JWT bearer tokens
+
 
 ## 📜 License
 
