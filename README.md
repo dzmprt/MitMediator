@@ -19,7 +19,7 @@ MitMediator
 - Simple registration through `AddMitMediator()` or assembly scanning
 - Supports `IStreamRequestHandle` and `IStreamPipelineBehavior`
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Installation
 
@@ -159,14 +159,11 @@ MitMediator is designed to feel familiar for those coming from MediatR. Core con
 | **Performance Focus**       | Async-first, zero-allocation for `ValueTask`               | Flexible but not optimized for `ValueTask`                    |
 | **License & Availability**  | MIT                                                        | Reciprocal Public License 1.5 (RPL1.5) and commercial license |
 
-## Testing
-
-This project includes comprehensive unit tests with **100% code coverage**. All tests are included in the repository
-
-## 🧩 Extensions
+## Extensions
 
 - [MitMediator.AutoApi](https://github.com/dzmprt/MitMediator.AutoApi) - auto-registers API endpoints and generates HTTP clients from request types
-- [MitMediator.AppAuthorize](https://github.com/dzmprt/MitMediator.AppAuthorize) - authentication and authorization via basic auth or JWT bearer tokens
+- [MitMediator.AppAuthorize](https://github.com/dzmprt/MitMediator.AppAuthorize) - simplifies authentication and authorization via basic auth or JWT bearer tokens
+- [MitMediator.InMemoryCache](https://github.com/dzmprt/MitMediator.InMemoryCache) - attribute-driven in-memory caching extension
 
 
 ## License
