@@ -1,12 +1,17 @@
 namespace MitMediator;
 
 /// <summary>
-/// Request type with void response.
+/// Marker of requests type without a response type. (for reflection in extension projects)
 /// </summary>
-public interface IRequest : IRequest<Unit>;
+public interface IBaseRequest;
 
 /// <summary>
 /// Request type.
 /// </summary>
 /// <typeparam name="TResponse">Type of request response.</typeparam>
-public interface IRequest<TResponse>;
+public interface IRequest<TResponse> : IBaseRequest;
+
+/// <summary>
+/// Request type with void response.
+/// </summary>
+public interface IRequest : IRequest<Unit>;
