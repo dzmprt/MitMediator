@@ -5,33 +5,33 @@ namespace MitMediator.Tests;
 
 public class HandleTest
 {
-    public class PingRequest : IRequest<string> { }
+    public class PingRequestTasks : IRequest<string> { }
 
-    public class PongRequest : IRequest { }
+    public class PongRequestTasks : IRequest { }
     
-    public class VoidRequest : IRequest { }
+    public class VoidRequestTasks : IRequest { }
 
     [Fact]
     public async Task Send_TRequestTResponse_InvokesHandler()
     {
         // Arrange
-        var request = new PingRequest();
+        var request = new PingRequestTasks();
         var expected = "Pong";
 
-        var handlerMock = new Mock<Tasks.IRequestHandler<PingRequest, string>>();
+        var handlerMock = new Mock<MitMediator.Tasks.IRequestHandler<PingRequestTasks, string>>();
         handlerMock
             .Setup(h => h.Handle(request, It.IsAny<CancellationToken>()))
             .ReturnsAsync(expected);
 
         var provider = new ServiceCollection()
             .AddSingleton(handlerMock.Object)
-            .AddMitMediator(typeof(VoidRequest).Assembly)
+            .AddMitMediator(typeof(VoidRequestTasks).Assembly)
             .BuildServiceProvider();
 
         var mediator = provider.GetRequiredService<IMediator>();
 
         // Act
-        var result = await mediator.Send<PingRequest, string>(request, default);
+        var result = await mediator.Send<PingRequestTasks, string>(request, default);
 
         // Assert
         Assert.Equal(expected, result);
@@ -42,16 +42,16 @@ public class HandleTest
     public async Task Send_TRequest_InvokesHandler()
     {
         // Arrange
-        var request = new PongRequest();
+        var request = new PongRequestTasks();
 
-        var handlerMock = new Mock<Tasks.IRequestHandler<PongRequest>>();
+        var handlerMock = new Mock<MitMediator.Tasks.IRequestHandler<PongRequestTasks>>();
         handlerMock
             .Setup(h => h.Handle(request, It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(Unit.Value));
 
         var provider = new ServiceCollection()
             .AddSingleton(handlerMock.Object)
-            .AddMitMediator(typeof(VoidRequest).Assembly)
+            .AddMitMediator(typeof(VoidRequestTasks).Assembly)
             .BuildServiceProvider();
 
         var mediator = provider.GetRequiredService<IMediator>();
@@ -68,15 +68,15 @@ public class HandleTest
     {
         
         // Arrange
-        var request = new VoidRequest();
-        var handlerMock = new Mock<Tasks.IRequestHandler<VoidRequest>>();
+        var request = new VoidRequestTasks();
+        var handlerMock = new Mock<MitMediator.Tasks.IRequestHandler<VoidRequestTasks>>();
         handlerMock
             .Setup(h => h.Handle(request, It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(Unit.Value));
 
         var provider = new ServiceCollection()
             .AddSingleton(handlerMock.Object)
-            .AddMitMediator(typeof(VoidRequest).Assembly)
+            .AddMitMediator(typeof(VoidRequestTasks).Assembly)
             .BuildServiceProvider();
 
         var mediator = provider.GetRequiredService<IMediator>();
@@ -92,33 +92,33 @@ public class HandleTest
     public async Task Send_BehaviorsOrder()
     {
         // Arrange
-        var request = new PingRequest();
+        var request = new PingRequestTasks();
         var executionOrder = new List<string>();
 
-        var handlerMock = new Mock<Tasks.IRequestHandler<PingRequest, string>>();
+        var handlerMock = new Mock<MitMediator.Tasks.IRequestHandler<PingRequestTasks, string>>();
         handlerMock
             .Setup(h => h.Handle(request, It.IsAny<CancellationToken>()))
             .ReturnsAsync("Handled");
         
-        var behaviorHigh = new Mock<IPipelineBehavior<PingRequest, string>>();
+        var behaviorHigh = new Mock<IPipelineBehavior<PingRequestTasks, string>>();
         behaviorHigh
             .Setup(b => b.HandleAsync(
                 request,
-                It.IsAny<IRequestHandlerNext<PingRequest, string>>(),
+                It.IsAny<IRequestHandlerNext<PingRequestTasks, string>>(),
                 It.IsAny<CancellationToken>()))
-            .Returns((PingRequest _, IRequestHandlerNext<PingRequest, string> next, CancellationToken ct) =>
+            .Returns((PingRequestTasks _, IRequestHandlerNext<PingRequestTasks, string> next, CancellationToken ct) =>
             {
                 executionOrder.Add("High");
                 return next.InvokeAsync(request, ct);
             });
 
-        var behaviorLow = new Mock<IPipelineBehavior<PingRequest, string>>();
+        var behaviorLow = new Mock<IPipelineBehavior<PingRequestTasks, string>>();
         behaviorLow
             .Setup(b => b.HandleAsync(
                 request,
-                It.IsAny<IRequestHandlerNext<PingRequest, string>>(),
+                It.IsAny<IRequestHandlerNext<PingRequestTasks, string>>(),
                 It.IsAny<CancellationToken>()))
-            .Returns((PingRequest _, IRequestHandlerNext<PingRequest, string> next, CancellationToken ct) =>
+            .Returns((PingRequestTasks _, IRequestHandlerNext<PingRequestTasks, string> next, CancellationToken ct) =>
             {
                 executionOrder.Add("Low");
                 return next.InvokeAsync(request, ct);
@@ -128,13 +128,13 @@ public class HandleTest
             .AddSingleton(handlerMock.Object)
             .AddSingleton(behaviorHigh.Object)
             .AddSingleton(behaviorLow.Object)
-            .AddMitMediator(typeof(VoidRequest).Assembly)
+            .AddMitMediator(typeof(VoidRequestTasks).Assembly)
             .BuildServiceProvider();
         
         var mediator = provider.GetRequiredService<IMediator>();
 
         // Act
-        var result = await mediator.Send<PingRequest, string>(request, default);
+        var result = await mediator.Send<PingRequestTasks, string>(request, default);
 
         // Assert
         Assert.Equal("Handled", result);
@@ -145,32 +145,32 @@ public class HandleTest
     public async Task Send_VoidRequest_BehaviorsOrder()
     {
         // Arrange
-        var request = new VoidRequest();
+        var request = new VoidRequestTasks();
         var executionOrder = new List<string>();
 
-        var handlerMock = new Mock<Tasks.IRequestHandler<VoidRequest>>();
+        var handlerMock = new Mock<MitMediator.Tasks.IRequestHandler<VoidRequestTasks>>();
         handlerMock
             .Setup(h => h.Handle(request, It.IsAny<CancellationToken>()));
 
-        var behaviorLow = new Mock<IPipelineBehavior<VoidRequest, Unit>>();
+        var behaviorLow = new Mock<IPipelineBehavior<VoidRequestTasks, Unit>>();
         behaviorLow
             .Setup(b => b.HandleAsync(
                 request,
-                It.IsAny<IRequestHandlerNext<VoidRequest, Unit>>(),
+                It.IsAny<IRequestHandlerNext<VoidRequestTasks, Unit>>(),
                 It.IsAny<CancellationToken>()))
-            .Returns((VoidRequest _, IRequestHandlerNext<VoidRequest, Unit> next, CancellationToken ct) =>
+            .Returns((VoidRequestTasks _, IRequestHandlerNext<VoidRequestTasks, Unit> next, CancellationToken ct) =>
             {
                 executionOrder.Add("Low");
                 return next.InvokeAsync(request, ct);
             });
 
-        var behaviorHigh = new Mock<IPipelineBehavior<VoidRequest, Unit>>();
+        var behaviorHigh = new Mock<IPipelineBehavior<VoidRequestTasks, Unit>>();
         behaviorHigh
             .Setup(b => b.HandleAsync(
                 request,
-                It.IsAny<IRequestHandlerNext<VoidRequest, Unit>>(),
+                It.IsAny<IRequestHandlerNext<VoidRequestTasks, Unit>>(),
                 It.IsAny<CancellationToken>()))
-            .Returns((VoidRequest _, IRequestHandlerNext<VoidRequest, Unit> next, CancellationToken ct) =>
+            .Returns((VoidRequestTasks _, IRequestHandlerNext<VoidRequestTasks, Unit> next, CancellationToken ct) =>
             {
                 executionOrder.Add("High");
                 return next.InvokeAsync(request, ct);
@@ -180,7 +180,7 @@ public class HandleTest
             .AddSingleton(handlerMock.Object)
             .AddSingleton(behaviorHigh.Object)
             .AddSingleton(behaviorLow.Object)
-            .AddMitMediator(typeof(VoidRequest).Assembly)
+            .AddMitMediator(typeof(VoidRequestTasks).Assembly)
             .BuildServiceProvider();
         
         var mediator = provider.GetRequiredService<IMediator>();

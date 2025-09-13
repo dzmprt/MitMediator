@@ -15,7 +15,7 @@ public class HandleTestForCompatibleWithMediatRSend
         var request = new PingRequest();
         var expected = "Pong";
 
-        var handlerMock = new Mock<Tasks.IRequestHandler<PingRequest, string>>();
+        var handlerMock = new Mock<MitMediator.Tasks.IRequestHandler<PingRequest, string>>();
         handlerMock
             .Setup(h => h.Handle(request, It.IsAny<CancellationToken>()))
             .ReturnsAsync(expected);
@@ -43,7 +43,7 @@ public class HandleTestForCompatibleWithMediatRSend
         var request = new PingRequest();
         var executionOrder = new List<string>();
 
-        var handlerMock = new Mock<Tasks.IRequestHandler<PingRequest, string>>();
+        var handlerMock = new Mock<MitMediator.Tasks.IRequestHandler<PingRequest, string>>();
         handlerMock
             .Setup(h => h.Handle(request, It.IsAny<CancellationToken>()))
             .ReturnsAsync("Handled");

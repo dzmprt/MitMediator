@@ -52,29 +52,37 @@ internal class Mediator(IServiceProvider serviceProvider) : IMediator
         CancellationToken cancellationToken)
         where TRequest : IRequest<TResponse>
     {
-        var requestHandler = serviceProvider
-            .GetRequiredService<IRequestHandler<TRequest, TResponse>>();
-
         var behaviors = serviceProvider
             .GetServices<IPipelineBehavior<TRequest, TResponse>>();
 
+        var requestHandler = serviceProvider
+            .GetService<IRequestHandler<TRequest, TResponse>>();
+
         using var behaviorEnumerator = behaviors.GetEnumerator();
-        var pipeline = new RequestPipeline<TRequest, TResponse>(behaviorEnumerator, requestHandler);
-        return pipeline.InvokeAsync(request, cancellationToken);
+        if (requestHandler is not null)
+        {
+            var pipeline = new RequestPipeline<TRequest, TResponse>(behaviorEnumerator, requestHandler);
+            return pipeline.InvokeAsync(request, cancellationToken);
+        }
+
+        var requestHandlerTaskResult = serviceProvider
+            .GetService<Tasks.IRequestHandler<TRequest, TResponse>>();
+
+        if (requestHandlerTaskResult is not null)
+        {
+            var pipeline =
+                new RequestPipelineTasks<TRequest, TResponse>(behaviorEnumerator, requestHandlerTaskResult);
+            return pipeline.InvokeAsync(request, cancellationToken);
+        }
+
+        throw new InvalidOperationException(
+            $"No handler for request {request.GetType().FullName} has been registered.");
     }
 
     public ValueTask<Unit> SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken)
         where TRequest : IRequest
     {
-        var requestHandler = serviceProvider
-            .GetRequiredService<IRequestHandler<TRequest>>();
-
-        var behaviors = serviceProvider
-            .GetServices<IPipelineBehavior<TRequest, Unit>>();
-
-        using var behaviorEnumerator = behaviors.GetEnumerator();
-        var pipeline = new RequestPipeline<TRequest, Unit>(behaviorEnumerator, requestHandler);
-        return pipeline.InvokeAsync(request, cancellationToken);
+        return SendAsync<TRequest, Unit>(request, cancellationToken);
     }
 
     public async ValueTask PublishAsync<TNotification>(

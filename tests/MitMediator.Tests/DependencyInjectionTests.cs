@@ -15,7 +15,7 @@ public class DependencyInjectionTests
     
     public class SampleRequest2 : IRequest<string> { }
 
-    public class SampleRequest2Handler : Tasks.IRequestHandler<SampleRequest2, string>
+    public class SampleRequest2Handler : MitMediator.Tasks.IRequestHandler<SampleRequest2, string>
     {
         public Task<string> Handle(SampleRequest2 request, CancellationToken cancellationToken)
         {
@@ -35,7 +35,7 @@ public class DependencyInjectionTests
     
     public class VoidRequest2 : IRequest { }
     
-    public class VoidRequest2Handler : Tasks.IRequestHandler<VoidRequest2>
+    public class VoidRequest2Handler : MitMediator.Tasks.IRequestHandler<VoidRequest2>
     {
         public Task<Unit> Handle(VoidRequest2 request, CancellationToken cancellationToken)
         {
@@ -64,7 +64,7 @@ public class DependencyInjectionTests
         var response = await sampleRequestHandler.HandleAsync(new SampleRequest(), CancellationToken.None);
         Assert.Equal("response", response);
 
-        var sampleRequest2Handler = provider.GetRequiredService<Tasks.IRequestHandler<SampleRequest2, string>>();
+        var sampleRequest2Handler = provider.GetRequiredService<MitMediator.Tasks.IRequestHandler<SampleRequest2, string>>();
         Assert.NotNull(sampleRequest2Handler);
         Assert.IsType<SampleRequest2Handler>(sampleRequest2Handler);
         response = await sampleRequest2Handler.Handle(new SampleRequest2(), CancellationToken.None);
@@ -75,7 +75,7 @@ public class DependencyInjectionTests
         Assert.IsType<VoidRequestHandler>(voidRequestHandler);
         await voidRequestHandler!.HandleAsync(new VoidRequest(), CancellationToken.None);
         
-        var voidRequest2Handler = provider.GetRequiredService<Tasks.IRequestHandler<VoidRequest2>>();
+        var voidRequest2Handler = provider.GetRequiredService<MitMediator.Tasks.IRequestHandler<VoidRequest2>>();
         Assert.NotNull(voidRequest2Handler);
         Assert.IsType<VoidRequest2Handler>(voidRequest2Handler);
         await voidRequest2Handler!.Handle(new VoidRequest2(), CancellationToken.None);

@@ -28,4 +28,8 @@
       <ProjectReference Include="..\..\src\MitMediator\MitMediator.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="TestsForTaskResults\" />
+    </ItemGroup>
+
 </Project>
