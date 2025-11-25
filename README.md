@@ -3,7 +3,7 @@ MitMediator
 ## Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines
 [![Build and Test](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml/badge.svg)](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml)
 ![NuGet](https://img.shields.io/nuget/v/MitMediator)
-![.NET 9.0](https://img.shields.io/badge/Version-.NET%209.0-informational?style=flat&logo=dotnet)
+![.NET 10.0](https://img.shields.io/badge/Version-.NET%2010-informational?style=flat&logo=dotnet)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/MitMediator)
 ![License](https://img.shields.io/github/license/dzmprt/MitMediator)
@@ -24,7 +24,7 @@ MitMediator
 ### Installation
 
 ```bash
-dotnet add package MitMediator -v 9.0.1
+dotnet add package MitMediator -v 10.0.0-rc
 ```
 
 ### Example Usage
@@ -136,16 +136,16 @@ MitMediator is designed to feel familiar for those coming from MediatR. Core con
 
 | Mediator    | Method                                     | Mean (ns) | Allocated (B) |
 |-------------|--------------------------------------------|----------:|--------------:|
-| MediatR     | Send (return result)                       |     90.52 |           336 |
-| MitMediator | SendAsync (return result)                  | **51.81** |         **0** |
-| MediatR     | Send (return result, use behaviors)        |    217.60 |           864 |
-| MitMediator | SendAsync (return result, use behaviors)   | **52.20** |         **0** |
-| MediatR     | Send (Return void)                         |     74.97 |           192 |
-| MitMediator | SendAsync (Return void)                    | **51.85** |         **0** |
-| MediatR     | Publish                                    |    156.26 |           592 |
-| MitMediator | PublishAsync                               | **58.10** |        **32** |
-| MediatR     | CreateStream (return stream, use behavior) |     940.0 |          1168 |
-| MitMediator | CreateStream (return stream, use behavior) | **203.3** |       **112** |
+| MediatR     | Send (return result)                       |     91.64 |           272 |
+| MitMediator | SendAsync (return result)                  | **40.60** |         **0** |
+| MediatR     | Send (return result, use behaviors)        |    191.82 |           800 |
+| MitMediator | SendAsync (return result, use behaviors)   | **40.49** |         **0** |
+| MediatR     | Send (Return void)                         |     77.73 |           128 |
+| MitMediator | SendAsync (Return void)                    | **36.73** |         **0** |
+| MediatR     | Publish                                    |    138.79 |           592 |
+| MitMediator | PublishAsync                               | **51.74** |        **32** |
+| MediatR     | CreateStream (return stream, use behavior) |     809.3 |          1168 |
+| MitMediator | CreateStream (return stream, use behavior) | **187.0** |       **112** |
 
 ### Features
 

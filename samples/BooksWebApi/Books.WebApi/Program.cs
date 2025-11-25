@@ -2,9 +2,9 @@ using System.Reflection;
 using Books.Application;
 using Books.Infrastructure;
 using Books.WebApi;
-using Microsoft.OpenApi.Models;
 using Books.WebApi.Endpoints;
 using Books.WebApi.Middlewares;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
