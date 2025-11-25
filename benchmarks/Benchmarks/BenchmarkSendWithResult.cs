@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Benchmarks;
 
 [MemoryDiagnoser]
-[SimpleJob(RuntimeMoniker.Net90)]
+[SimpleJob(RuntimeMoniker.Net10_0)]
 public class BenchmarkSendWithResult
 {
     private MitMediator.IMediator _mitMediatr;

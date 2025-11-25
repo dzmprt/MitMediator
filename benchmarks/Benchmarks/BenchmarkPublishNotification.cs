@@ -8,7 +8,7 @@ using Benchmarks.EmopustaMediatR;
  namespace Benchmarks;
  
  [MemoryDiagnoser]
- [SimpleJob(RuntimeMoniker.Net90)]
+ [SimpleJob(RuntimeMoniker.Net10_0)]
  public class BenchmarkPublishNotification
  {
      private MitMediator.IMediator _mitMediatr;

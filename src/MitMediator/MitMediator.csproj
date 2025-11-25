@@ -5,8 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>MitMediator</PackageId> 
-        <Version>9.0.1</Version> 
-        <Description>Mediator pattern with support for requests, notifications, streams, and pipelines</Description> 
+        <Version>10.0.0-rc</Version> 
+        <Description>Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines</Description> 
         <PackageProjectUrl>https://github.com/dzmprt/MitMediator</PackageProjectUrl> 
         <RepositoryUrl>https://github.com/dzmprt/MitMediator</RepositoryUrl> 
         <Authors>Dmitry Protko</Authors> 
@@ -15,16 +15,17 @@
         <PackageTags>mediator;request;response;queries;commands;mitmediator;cqrs;</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile> 
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance> 
-        <PackageReleaseNotes>- Added IBaseRequest marker interface for request types</PackageReleaseNotes> 
+        <PackageReleaseNotes>v10.0.0-rc
+Updated target framework to .NET 10</PackageReleaseNotes> 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
         <Title>MitMediator</Title>
         <TrimMode>full</TrimMode>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <AnalysisLevel>latest</AnalysisLevel>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <WarningsAsErrors>CA*,CS*,SA*</WarningsAsErrors>
         <CodeAnalysisRuleSet>MitMediator.ruleset</CodeAnalysisRuleSet>
-        <LangVersion>13</LangVersion>
+        <LangVersion>14</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -48,11 +49,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
     </ItemGroup>
 
     <ItemGroup>
