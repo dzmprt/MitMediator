@@ -29,7 +29,7 @@ public static class BooksApi
     {
         #region Queries
         
-        app.MapGet($"{ApiUrl}/{Version}/{Tag}/{{bookId}}", GetBookByIdAsync)
+        app.MapGet($"{ApiUrl}/{Version}/{Tag}/{{bookId:int}}", GetBookByIdAsync)
             .WithTags(Tag)
             .WithName("Get book by id.")
             .WithGroupName(Version)
@@ -51,13 +51,13 @@ public static class BooksApi
             .WithGroupName(Version)
             .Produces<Book>();
         
-        app.MapPut($"{ApiUrl}/{Version}/{Tag}/{{bookId}}", UpdateBookAsync)
+        app.MapPut($"{ApiUrl}/{Version}/{Tag}/{{bookId:int}}", UpdateBookAsync)
             .WithTags(Tag)
             .WithName("Update book.")
             .WithGroupName(Version)
             .Produces<Book>();
         
-        app.MapDelete($"{ApiUrl}/{Version}/{Tag}/{{bookId}}", DeleteBookAsync)
+        app.MapDelete($"{ApiUrl}/{Version}/{Tag}/{{bookId:int}}", DeleteBookAsync)
             .WithTags(Tag)
             .WithName("Delete book.")
             .WithGroupName(Version);
