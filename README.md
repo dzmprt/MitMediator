@@ -3,7 +3,7 @@ MitMediator
 ## Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines
 [![Build and Test](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml/badge.svg)](https://github.com/dzmprt/MitMediator/actions/workflows/dotnet.yml)
 ![NuGet](https://img.shields.io/nuget/v/MitMediator)
-![.NET 10.0](https://img.shields.io/badge/Version-.NET%2010-informational?style=flat&logo=dotnet)
+![.NET 10](https://img.shields.io/badge/Version-.NET%2010-informational?style=flat&logo=dotnet)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/MitMediator)
 ![License](https://img.shields.io/github/license/dzmprt/MitMediator)
@@ -24,7 +24,7 @@ MitMediator
 ### Installation
 
 ```bash
-dotnet add package MitMediator -v 10.0.0-rc
+dotnet add package MitMediator -v 10.0.0
 ```
 
 ### Example Usage
@@ -116,7 +116,7 @@ public class NotificationHandler : INotificationHandler<Notification>
 
 You can reuse your existing handlers with minimal modifications — just update the namespaces and registration calls
 
-1. Add the `MitMediator` package `dotnet add package MitMediator -v 9.0.1`
+1. Add the `MitMediator` package `dotnet add package MitMediator -v 10.0.0`
 2. In your request files, replace the namespace `MediatR` with `MitMediator`
 3. In your request handler files, replace the namespace `MediatR` with `MitMediator` (and`MitMediator.Tasks` for `Task` result)
 4. Update your dependency injection setup: replace `.AddMediatR(...)` with `.AddMitMediator()`

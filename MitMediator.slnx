@@ -1,0 +1,24 @@
+﻿<Solution>
+  <Folder Name="/assets/">
+    <File Path="assets\logo.png" />
+  </Folder>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/Benchmarks/Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/NativeAOTConsoleApp/NativeAOTConsoleApp.csproj" />
+    <Project Path="samples/SimpleConsoleApp/SimpleConsoleApp.csproj" />
+  </Folder>
+  <Folder Name="/samples/BooksWebApi/">
+    <Project Path="samples/BooksWebApi/Books.Application/Books.Application.csproj" />
+    <Project Path="samples/BooksWebApi/Books.Domain/Books.Domain.csproj" />
+    <Project Path="samples/BooksWebApi/Books.Infrastructure/Books.Infrastructure.csproj" />
+    <Project Path="samples/BooksWebApi/Books.WebApi/Books.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/MitMediator/MitMediator.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MitMediator.Tests/MitMediator.Tests.csproj" />
+  </Folder>
+</Solution>

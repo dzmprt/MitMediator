@@ -29,7 +29,7 @@ internal static class AuthorsApi
     {
         #region Queries
         
-        app.MapGet($"{ApiUrl}/{Version}/{Tag}/{{authorId}}", GetAuthorByIdAsync)
+        app.MapGet($"{ApiUrl}/{Version}/{Tag}/{{authorId:int}}", GetAuthorByIdAsync)
             .WithTags(Tag)
             .WithName("Get author by id.")
             .WithGroupName(Version)
@@ -51,13 +51,13 @@ internal static class AuthorsApi
             .WithGroupName(Version)
             .Produces<Author>();
         
-        app.MapPut($"{ApiUrl}/{Version}/{Tag}/{{authorId}}", UpdateAuthorAsync)
+        app.MapPut($"{ApiUrl}/{Version}/{Tag}/{{authorId:int}}", UpdateAuthorAsync)
             .WithTags(Tag)
             .WithName("Update author.")
             .WithGroupName(Version)
             .Produces<Author>();
         
-        app.MapDelete($"{ApiUrl}/{Version}/{Tag}/{{authorId}}", DeleteAuthorAsync)
+        app.MapDelete($"{ApiUrl}/{Version}/{Tag}/{{authorId:int}}", DeleteAuthorAsync)
             .WithTags(Tag)
             .WithName("Delete author.")
             .WithGroupName(Version);
