@@ -43,6 +43,21 @@ public class DependencyInjectionTests
         }
     }
 
+    public sealed class FirstNotification : INotification;
+
+    public sealed class SecondNotification : INotification;
+
+    public sealed class MultiNotificationHandler :
+        INotificationHandler<FirstNotification>,
+        INotificationHandler<SecondNotification>
+    {
+        public ValueTask HandleAsync(FirstNotification notification, CancellationToken cancellationToken)
+            => ValueTask.CompletedTask;
+
+        public ValueTask HandleAsync(SecondNotification notification, CancellationToken cancellationToken)
+            => ValueTask.CompletedTask;
+    }
+
     [Fact]
     public async Task AddMitMediator_RegistersMediatorAndHandlers()
     {
@@ -116,5 +131,19 @@ public class DependencyInjectionTests
 
         var handler = provider.GetService<IRequestHandler<SampleRequest, string>>();
         Assert.Null(handler);
+    }
+
+    [Fact]
+    public void AddMitMediator_RegistersEveryNotificationContractImplementedByHandler()
+    {
+        var services = new ServiceCollection();
+
+        services.AddMitMediator(typeof(MultiNotificationHandler).Assembly);
+        using var provider = services.BuildServiceProvider();
+
+        Assert.IsType<MultiNotificationHandler>(
+            provider.GetRequiredService<INotificationHandler<FirstNotification>>());
+        Assert.IsType<MultiNotificationHandler>(
+            provider.GetRequiredService<INotificationHandler<SecondNotification>>());
     }
 }

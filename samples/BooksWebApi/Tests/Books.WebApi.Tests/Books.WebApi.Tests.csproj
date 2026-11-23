@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+        <PackageReference Include="Moq" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Books.WebApi\Books.WebApi.csproj" />
+        <ProjectReference Include="..\..\Books.Infrastructure\Books.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

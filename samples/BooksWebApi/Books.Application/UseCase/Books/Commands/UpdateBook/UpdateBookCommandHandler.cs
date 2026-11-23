@@ -53,9 +53,7 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Book>
             throw new BadOperationException("Genre not found");
         }
         
-        book.SetTitle(request.Title);
-        book.SetAuthor(author);
-        book.SetGenre(genre);
+        book.Update(request.Title, author, genre);
 
         await _booksRepository.UpdateAsync(book, cancellationToken);
         return book;

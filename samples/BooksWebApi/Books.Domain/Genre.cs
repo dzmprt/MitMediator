@@ -1,9 +1,11 @@
+using Books.Domain.Events;
+
 namespace Books.Domain;
 
 /// <summary>
 /// Book genre.
 /// </summary>
-public class Genre
+public class Genre : Entity
 {
     /// <summary>
     /// Max genre name length.
@@ -13,7 +15,7 @@ public class Genre
     /// <summary>
     /// Genre name.
     /// </summary>
-    public string GenreName { get; private set; }
+    public string GenreName { get; private set; } = null!;
 
     private Genre(){}
     
@@ -33,5 +35,14 @@ public class Genre
             throw new ArgumentException($"{nameof(genreName)} cannot exceed {MaxGenreNameLength} characters.", nameof(genreName));
         }
         GenreName = genreName.Trim().ToUpperInvariant();
+        AddDomainEvent(new GenreCreatedDomainEvent(this));
+    }
+
+    /// <summary>
+    /// Marks the genre as deleted.
+    /// </summary>
+    public void MarkDeleted()
+    {
+        AddDomainEvent(new GenreDeletedDomainEvent(GenreName));
     }
 }

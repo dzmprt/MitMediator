@@ -30,6 +30,7 @@ internal sealed class DeleteBookCommandHandler : IRequestHandler<DeleteBookComma
         {
             throw new NotFoundException();
         }
+        book.MarkDeleted();
         await _booksRepository.RemoveAsync(book, cancellationToken);
         return Unit.Value;
     }

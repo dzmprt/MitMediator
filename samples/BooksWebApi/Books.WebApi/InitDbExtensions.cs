@@ -3,8 +3,14 @@ using Books.Infrastructure;
 
 namespace Books.WebApi;
 
+/// <summary>
+/// Initializes the sample database.
+/// </summary>
 public static class InitDbExtensions
 {
+    /// <summary>
+    /// Creates and seeds the database.
+    /// </summary>
     public static void InitDatabase(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();

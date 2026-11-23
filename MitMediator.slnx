@@ -15,6 +15,12 @@
     <Project Path="samples/BooksWebApi/Books.Infrastructure/Books.Infrastructure.csproj" />
     <Project Path="samples/BooksWebApi/Books.WebApi/Books.WebApi.csproj" />
   </Folder>
+  <Folder Name="/samples/BooksWebApi/Tests/">
+    <Project Path="samples/BooksWebApi/Tests/Books.Application.Tests/Books.Application.Tests.csproj" />
+    <Project Path="samples/BooksWebApi/Tests/Books.Domain.Tests/Books.Domain.Tests.csproj" />
+    <Project Path="samples/BooksWebApi/Tests/Books.Infrastructure.Tests/Books.Infrastructure.Tests.csproj" />
+    <Project Path="samples/BooksWebApi/Tests/Books.WebApi.Tests/Books.WebApi.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/MitMediator/MitMediator.csproj" />
   </Folder>
