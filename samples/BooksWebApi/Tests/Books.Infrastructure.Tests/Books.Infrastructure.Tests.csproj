@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <PackageReference Include="Moq" />
+        <ProjectReference Include="..\..\Books.Infrastructure\Books.Infrastructure.csproj" />
+    </ItemGroup>
+</Project>

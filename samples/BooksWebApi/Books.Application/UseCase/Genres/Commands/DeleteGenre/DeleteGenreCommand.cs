@@ -10,5 +10,5 @@ public struct DeleteGenreCommand : IRequest
     /// <summary>
     /// Genre name.
     /// </summary>
-    public string GenreName { get; init; }
+    public required string GenreName { get; init; }
 }

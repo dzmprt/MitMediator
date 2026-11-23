@@ -30,8 +30,7 @@ internal sealed class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorC
         {
             throw new NotFoundException();
         }
-        author.UpdateFirstName(command.FirstName);
-        author.UpdateLastName(command.LastName);
+        author.UpdateName(command.FirstName, command.LastName);
         await _authorRepository.UpdateAsync(author, cancellationToken);
         return author;
     }

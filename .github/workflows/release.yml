@@ -7,15 +7,51 @@ on:
 
 jobs:
   publish:
+    permissions:
+      contents: write
+      id-token: write
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET 10.0.x
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: "11.0.x"
+
+      - name: Prepare release metadata
+        id: release_metadata
+        run: |
+          set -euo pipefail
+
+          project="./src/MitMediator/MitMediator.csproj"
+          package_version="$(dotnet msbuild "$project" -nologo -getProperty:Version)"
+          tag_version="${GITHUB_REF_NAME#v}"
+
+          if [[ "$tag_version" != "$package_version" ]]; then
+            echo "::error::Tag version '$tag_version' does not match package version '$package_version'."
+            exit 1
+          fi
+
+          dotnet msbuild "$project" -nologo -getProperty:PackageReleaseNotes > release-notes.md
+          if [[ ! -s release-notes.md ]]; then
+            echo "::error::PackageReleaseNotes is empty in $project."
+            exit 1
+          fi
+
+          if [[ "$package_version" == *-* ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Restore dependencies
         run: dotnet restore
@@ -30,23 +66,15 @@ jobs:
         run: dotnet pack ./src/MitMediator/MitMediator.csproj --configuration Release --no-build --output ./nupkg
 
       - name: Push to NuGet
-        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
-
-      - name: Determine prerelease flag
-        id: prerelease_check
-        run: |
-          if [[ "${{ github.ref_name }}" == *-* ]]; then
-            echo "prerelease=true" >> $GITHUB_OUTPUT
-          else
-            echo "prerelease=false" >> $GITHUB_OUTPUT
-          fi
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: v${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: release-notes.md
           files: ./nupkg/*.nupkg
-          prerelease: ${{ steps.prerelease_check.outputs.prerelease }}
+          prerelease: ${{ steps.release_metadata.outputs.prerelease }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

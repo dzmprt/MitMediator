@@ -4,6 +4,7 @@ using Books.Application.UseCase.Books.Commands.UpdateBook;
 using Books.Application.UseCase.Books.Queries.GetBook;
 using Books.Application.UseCase.Books.Queries.GetBooksByFilter;
 using Books.Domain;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MitMediator;
 
@@ -27,88 +28,108 @@ public static class BooksApi
     /// <returns><see cref="WebApplication"/>.</returns>
     public static WebApplication UseBooksApi(this WebApplication app)
     {
+        var books = app.MapGroup($"/{ApiUrl}/{Version}/{Tag}")
+            .WithTags(Tag)
+            .WithGroupName(Version);
+
         #region Queries
         
-        app.MapGet($"{ApiUrl}/{Version}/{Tag}/{{bookId:int}}", GetBookByIdAsync)
-            .WithTags(Tag)
-            .WithName("Get book by id.")
-            .WithGroupName(Version)
-            .Produces<Book>();
+        books.MapGet("/{bookId:int}", GetBookByIdAsync)
+            .WithName("GetBookById")
+            .WithSummary("Gets a book by id.");
         
-        app.MapGet($"{ApiUrl}/{Version}/{Tag}", GetBooksByFilterAsync)
-            .WithTags(Tag)
-            .WithName("Get books by filter.")
-            .WithGroupName(Version)
-            .Produces<Book[]>();
+        books.MapGet("/", GetBooksByFilterAsync)
+            .WithName("GetBooks")
+            .WithSummary("Gets books matching an optional text filter.");
         
         #endregion
 
         #region Commands
 
-        app.MapPost($"{ApiUrl}/{Version}/{Tag}", CreateBookAsync)
-            .WithTags(Tag)
-            .WithName("Create book.")
-            .WithGroupName(Version)
-            .Produces<Book>();
+        books.MapPost("/", CreateBookAsync)
+            .WithName("CreateBook")
+            .WithSummary("Creates a book.");
         
-        app.MapPut($"{ApiUrl}/{Version}/{Tag}/{{bookId:int}}", UpdateBookAsync)
-            .WithTags(Tag)
-            .WithName("Update book.")
-            .WithGroupName(Version)
-            .Produces<Book>();
+        books.MapPut("/{bookId:int}", UpdateBookAsync)
+            .WithName("UpdateBook")
+            .WithSummary("Updates a book.");
         
-        app.MapDelete($"{ApiUrl}/{Version}/{Tag}/{{bookId:int}}", DeleteBookAsync)
-            .WithTags(Tag)
-            .WithName("Delete book.")
-            .WithGroupName(Version);
+        books.MapDelete("/{bookId:int}", DeleteBookAsync)
+            .WithName("DeleteBook")
+            .WithSummary("Deletes a book.");
 
         #endregion
 
         return app;
     }
     
-    private static ValueTask<Book> GetBookByIdAsync([FromServices] IMediator mediator, [FromRoute] int bookId, CancellationToken cancellationToken)
+    private static async ValueTask<Ok<Book>> GetBookByIdAsync(
+        [FromServices] IMediator mediator,
+        [FromRoute] int bookId,
+        CancellationToken cancellationToken)
     {
-        return mediator.SendAsync<GetBookQuery, Book>(new GetBookQuery()
+        var book = await mediator.SendAsync<GetBookQuery, Book>(new GetBookQuery
         {
             BookId = bookId,
         }, cancellationToken);
+        return TypedResults.Ok(book);
     }
     
-    private static ValueTask<Book[]> GetBooksByFilterAsync([FromServices] IMediator mediator, [FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? freeText, CancellationToken cancellationToken)
+    private static async ValueTask<Ok<Book[]>> GetBooksByFilterAsync(
+        [FromServices] IMediator mediator,
+        [FromQuery] int? limit,
+        [FromQuery] int? offset,
+        [FromQuery] string? freeText,
+        CancellationToken cancellationToken)
     {
-        return mediator.SendAsync<GetBooksByFilterQuery, Book[]>(new GetBooksByFilterQuery()
+        var books = await mediator.SendAsync<GetBooksByFilterQuery, Book[]>(new GetBooksByFilterQuery
         {
             Limit = limit,
             Offset = offset,
             FreeText = freeText
         }, cancellationToken);
+        return TypedResults.Ok(books);
     }
     
-    private static ValueTask<Book> CreateBookAsync([FromServices] IMediator mediator, [FromBody] CreateBookCommand command, CancellationToken cancellationToken)
+    private static async ValueTask<Created<Book>> CreateBookAsync(
+        [FromServices] IMediator mediator,
+        [FromBody] CreateBookCommand command,
+        CancellationToken cancellationToken)
     {
-        return mediator.SendAsync<CreateBookCommand, Book>(command, cancellationToken);
+        var book = await mediator.SendAsync<CreateBookCommand, Book>(command, cancellationToken);
+        return TypedResults.Created($"/api/v1/books/{book.BookId}", book);
     }
     
-    private static ValueTask<Book> UpdateBookAsync([FromServices] IMediator mediator, [FromRoute] int bookId, [FromBody] UpdateBookPayload payload, CancellationToken cancellationToken)
+    private static async ValueTask<Ok<Book>> UpdateBookAsync(
+        [FromServices] IMediator mediator,
+        [FromRoute] int bookId,
+        [FromBody] UpdateBookPayload payload,
+        CancellationToken cancellationToken)
     {
-        return mediator.SendAsync<UpdateBookCommand, Book>(payload.CreateCommand(bookId), cancellationToken);
+        var book = await mediator.SendAsync<UpdateBookCommand, Book>(
+            payload.CreateCommand(bookId),
+            cancellationToken);
+        return TypedResults.Ok(book);
     }
     
-    private static async ValueTask DeleteBookAsync([FromServices] IMediator mediator, [FromRoute] int bookId, CancellationToken cancellationToken)
+    private static async ValueTask<NoContent> DeleteBookAsync(
+        [FromServices] IMediator mediator,
+        [FromRoute] int bookId,
+        CancellationToken cancellationToken)
     {
         await mediator.SendAsync(new DeleteBookCommand() {BookId = bookId}, cancellationToken);
+        return TypedResults.NoContent();
     }
 
     /// <summary>
     /// Update author payload.
     /// </summary>
-    class UpdateBookPayload
+    private sealed record UpdateBookPayload
     {
         /// <summary>
         /// Title.
         /// </summary>
-        public string Title { get; init; }
+        public required string Title { get; init; }
     
         /// <summary>
         /// Author id.
@@ -118,7 +139,7 @@ public static class BooksApi
         /// <summary>
         /// Genre.
         /// </summary>
-        public string GenreName { get; init; }
+        public required string GenreName { get; init; }
 
         public UpdateBookCommand CreateCommand(int bookId)
         {

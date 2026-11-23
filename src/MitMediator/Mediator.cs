@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using MitMediator.Tasks;
 
@@ -5,6 +6,8 @@ namespace MitMediator;
 
 internal class Mediator(IServiceProvider serviceProvider) : IMediator
 {
+    [RequiresDynamicCode("This compatibility overload uses runtime generic instantiation. Use the generic Send overload for Native AOT.")]
+    [RequiresUnreferencedCode("This compatibility overload uses reflection to select the concrete request handler. Use the generic Send overload when trimming.")]
     public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
     {
         var requestType = request.GetType();

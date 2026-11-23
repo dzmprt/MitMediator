@@ -6,7 +6,7 @@ namespace Books.Application.UseCase.Books.Commands.UpdateBook;
 /// <summary>
 /// Update book command.
 /// </summary>
-public class UpdateBookCommand : IRequest<Book>
+public struct UpdateBookCommand : IRequest<Book>
 {
     /// <summary>
     /// Book id.
@@ -16,7 +16,7 @@ public class UpdateBookCommand : IRequest<Book>
     /// <summary>
     /// Title.
     /// </summary>
-    public string Title { get; init; }
+    public required string Title { get; init; }
     
     /// <summary>
     /// Author id.
@@ -26,6 +26,6 @@ public class UpdateBookCommand : IRequest<Book>
     /// <summary>
     /// Genre.
     /// </summary>
-    public string GenreName { get; init; }
+    public required string GenreName { get; init; }
 
 }

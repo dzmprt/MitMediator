@@ -14,6 +14,7 @@ public class AuthorTypeConfiguration : IEntityTypeConfiguration<Author>
     public void Configure(EntityTypeBuilder<Author> builder)
     {
         builder.HasKey(e => e.AuthorId);
+        builder.Ignore(e => e.DomainEvents);
         builder.Property(e => e.FirstName).IsRequired().HasMaxLength(Author.MaxNameLength);
         builder.Property(e => e.LastName).IsRequired().HasMaxLength(Author.MaxNameLength);
     }

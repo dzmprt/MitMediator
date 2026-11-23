@@ -1,9 +1,11 @@
-﻿namespace Books.Domain;
+﻿using Books.Domain.Events;
+
+namespace Books.Domain;
 
 /// <summary>
 /// Book.
 /// </summary>
-public class Book
+public class Book : Entity
 {
     /// <summary>
     /// Max title length.
@@ -18,17 +20,17 @@ public class Book
     /// <summary>
     /// Title.
     /// </summary>
-    public string Title { get; private set; }
+    public string Title { get; private set; } = null!;
     
     /// <summary>
     /// Author.
     /// </summary>
-    public Author Author { get; private set; }
+    public Author Author { get; private set; } = null!;
     
     /// <summary>
     /// Genre.
     /// </summary>
-    public Genre Genre { get; private set; }
+    public Genre Genre { get; private set; } = null!;
 
     private Book(){}
     
@@ -41,9 +43,29 @@ public class Book
     /// <exception cref="ArgumentException">Incorrect title.</exception>
     public Book(string title, Author author, Genre genre)
     {
-        SetTitle(title);
-        SetAuthor(author);
-        SetGenre(genre);
+        SetTitleCore(title);
+        SetAuthorCore(author);
+        SetGenreCore(genre);
+        AddDomainEvent(new BookCreatedDomainEvent(this));
+    }
+
+    /// <summary>
+    /// Updates the book details.
+    /// </summary>
+    public void Update(string title, Author author, Genre genre)
+    {
+        var previousTitle = Title;
+        var previousAuthor = Author;
+        var previousGenre = Genre;
+
+        SetTitleCore(title);
+        SetAuthorCore(author);
+        SetGenreCore(genre);
+
+        if (previousTitle != Title || !ReferenceEquals(previousAuthor, Author) || !ReferenceEquals(previousGenre, Genre))
+        {
+            AddDomainEvent(new BookUpdatedDomainEvent(this));
+        }
     }
 
     /// <summary>
@@ -52,7 +74,13 @@ public class Book
     /// <param name="genre">Genre.</param>
     public void SetGenre(Genre genre)
     {
-        Genre = genre;
+        var previousGenre = Genre;
+        SetGenreCore(genre);
+
+        if (!ReferenceEquals(previousGenre, Genre))
+        {
+            AddDomainEvent(new BookUpdatedDomainEvent(this));
+        }
     }
 
     /// <summary>
@@ -61,7 +89,13 @@ public class Book
     /// <param name="author">Author.</param>
     public void SetAuthor(Author author)
     {
-        Author = author;
+        var previousAuthor = Author;
+        SetAuthorCore(author);
+
+        if (!ReferenceEquals(previousAuthor, Author))
+        {
+            AddDomainEvent(new BookUpdatedDomainEvent(this));
+        }
     }
 
     /// <summary>
@@ -70,6 +104,25 @@ public class Book
     /// <param name="title">Title.</param>
     /// <exception cref="ArgumentException">Incorrect title.</exception>
     public void SetTitle(string title)
+    {
+        var previousTitle = Title;
+        SetTitleCore(title);
+
+        if (previousTitle != Title)
+        {
+            AddDomainEvent(new BookUpdatedDomainEvent(this));
+        }
+    }
+
+    /// <summary>
+    /// Marks the book as deleted.
+    /// </summary>
+    public void MarkDeleted()
+    {
+        AddDomainEvent(new BookDeletedDomainEvent(BookId));
+    }
+
+    private void SetTitleCore(string title)
     {
         if (string.IsNullOrWhiteSpace(title))
         {
@@ -81,5 +134,15 @@ public class Book
             throw new ArgumentException($"{nameof(title)} cannot exceed {MaxTitleLength} characters.", nameof(title));
         }
         Title = title.Trim().ToUpperInvariant();
+    }
+
+    private void SetAuthorCore(Author author)
+    {
+        Author = author;
+    }
+
+    private void SetGenreCore(Genre genre)
+    {
+        Genre = genre;
     }
 }

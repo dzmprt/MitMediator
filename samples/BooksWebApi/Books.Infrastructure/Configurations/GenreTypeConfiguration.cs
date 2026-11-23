@@ -14,6 +14,7 @@ public class GenreTypeConfiguration : IEntityTypeConfiguration<Genre>
     public void Configure(EntityTypeBuilder<Genre> builder)
     {
         builder.HasKey(e => e.GenreName);
+        builder.Ignore(e => e.DomainEvents);
         builder.Property(e => e.GenreName).IsRequired().HasMaxLength(Genre.MaxGenreNameLength);
     }
 }

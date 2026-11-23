@@ -16,10 +16,10 @@ public struct UpdateAuthorCommand : IRequest<Author>
     /// <summary>
     /// First name.
     /// </summary>
-    public string FirstName { get; init; }
+    public required string FirstName { get; init; }
     
     /// <summary>
     /// Last name.
     /// </summary>
-    public string LastName { get; init; }
+    public required string LastName { get; init; }
 }

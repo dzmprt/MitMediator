@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace MitMediator;
 
 /// <summary>
@@ -13,6 +15,8 @@ public interface IMediator
     /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
     /// <typeparam name="TResponse">Response type.</typeparam>
     /// <returns>A task that represents the send operation. The task result contains the handler response.</returns>
+    [RequiresDynamicCode("This compatibility overload uses runtime generic instantiation. Use the generic Send overload for Native AOT.")]
+    [RequiresUnreferencedCode("This compatibility overload uses reflection to select the concrete request handler. Use the generic Send overload when trimming.")]
     Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken);
 
     /// <summary>

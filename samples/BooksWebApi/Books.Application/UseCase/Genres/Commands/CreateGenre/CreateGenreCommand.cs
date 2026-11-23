@@ -11,5 +11,5 @@ public struct CreateGenreCommand : IRequest<Genre>
     /// <summary>
     /// Genre name.
     /// </summary>
-    public string GenreName { get; init; }
+    public required string GenreName { get; init; }
 }

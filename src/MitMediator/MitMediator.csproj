@@ -4,36 +4,41 @@
         <RootNamespace>MitMediator</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageId>MitMediator</PackageId> 
-        <Version>10.0.0</Version> 
-        <Description>Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines</Description> 
-        <PackageProjectUrl>https://github.com/dzmprt/MitMediator</PackageProjectUrl> 
-        <RepositoryUrl>https://github.com/dzmprt/MitMediator</RepositoryUrl> 
-        <Authors>Dmitry Protko</Authors> 
+        <PackageId>MitMediator</PackageId>
+        <Version>11.0.0</Version>
+        <Description>Fast mediator for handling requests, commands, notifications, and streams with ValueTask and ordered pipelines</Description>
+        <PackageProjectUrl>https://github.com/dzmprt/MitMediator</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/dzmprt/MitMediator</RepositoryUrl>
+        <Authors>Dmitry Protko</Authors>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageIcon>logo.png</PackageIcon> 
+        <PackageIcon>logo.png</PackageIcon>
         <PackageTags>mediator;request;response;queries;commands;mitmediator;cqrs;</PackageTags>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile> 
-        <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance> 
-        <PackageReleaseNotes>v10.0.0
-Updated target framework to .NET 10</PackageReleaseNotes> 
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+        <PackageReleaseNotes>v11.0.0
+Updated target framework to .NET 11
+Marked the library as trimming and Native AOT compatible
+Added trimming and Native AOT diagnostics for reflection-based APIs
+Fixed handler scanning to register all implemented handler contracts</PackageReleaseNotes>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <Title>MitMediator</Title>
         <TrimMode>full</TrimMode>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net11.0</TargetFramework>
         <AnalysisLevel>latest</AnalysisLevel>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <WarningsAsErrors>CA*,CS*,SA*</WarningsAsErrors>
         <CodeAnalysisRuleSet>MitMediator.ruleset</CodeAnalysisRuleSet>
-        <LangVersion>14</LangVersion>
+        <LangVersion>15</LangVersion>
+        <IsTrimmable>true</IsTrimmable>
+        <IsAotCompatible>true</IsAotCompatible>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile />
+        <DocumentationFile />
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile />
+        <DocumentationFile />
     </PropertyGroup>
 
     <ItemGroup>
@@ -49,11 +54,11 @@ Updated target framework to .NET 10</PackageReleaseNotes>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100">
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-          <PrivateAssets>all</PrivateAssets>
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     </ItemGroup>
 
     <ItemGroup>

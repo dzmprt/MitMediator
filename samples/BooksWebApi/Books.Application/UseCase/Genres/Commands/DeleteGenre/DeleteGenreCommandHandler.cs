@@ -30,6 +30,7 @@ internal sealed class DeleteGenreCommandHandler : IRequestHandler<DeleteGenreCom
         {
             throw new NotFoundException();
         }
+        genre.MarkDeleted();
         await _genreRepository.RemoveAsync(genre, cancellationToken);
         return Unit.Value;
     }

@@ -11,10 +11,10 @@ public struct CreateAuthorCommand : IRequest<Author>
     /// <summary>
     /// New author first name.
     /// </summary>
-    public string FirstName { get; init; }
+    public required string FirstName { get; init; }
     
     /// <summary>
     /// New author last name.
     /// </summary>
-    public string LastName { get; init; }
+    public required string LastName { get; init; }
 }

@@ -11,6 +11,8 @@ builder.Services.AddControllers();
 builder.Services
     .AddSwaggerGen(options => options.ConfigureSwagger())
     .AddEndpointsApiExplorer()
+    .AddProblemDetails()
+    .AddExceptionHandler<BooksApiExceptionHandler>()
     .AddApplicationServices()
     .AddPersistenceServices();
 
@@ -18,7 +20,8 @@ var app = builder.Build();
 
 app.InitDatabase();
 
-app.UseCustomExceptionsHandler();
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 app.UseAuthorsApi()
     .UseGenresApi()
@@ -30,3 +33,8 @@ app.UseSwagger()
 app.UseHttpsRedirection();
 
 app.Run();
+
+/// <summary>
+/// Application entry point exposed for integration testing.
+/// </summary>
+public partial class Program;

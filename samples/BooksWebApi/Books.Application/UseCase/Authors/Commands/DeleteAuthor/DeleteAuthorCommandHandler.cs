@@ -29,6 +29,7 @@ internal sealed class DeleteAuthorCommandHandler : IRequestHandler<DeleteAuthorC
         {
             throw new NotFoundException();
         }
+        author.MarkDeleted();
         await _authorRepository.RemoveAsync(author, cancellationToken);
         return Unit.Value;
     }
